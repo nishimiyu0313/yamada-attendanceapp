@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\AttendanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::middleware('auth')->group(function () {
+Route::get('/attendance', [AttendanceController::class, 'attendance']);
+Route::get('/attendance/list', [AttendanceController::class, 'list']);
+Route::get('/stamp_correction_request/list', [AttendanceController::class, 'request']);
 });

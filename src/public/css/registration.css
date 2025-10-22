@@ -1,0 +1,51 @@
+ 
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px; /* 各要素の間隔 */
+            background-color: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+           
+        }
+        .date-display {
+            font-size: 30px;
+            display: flex;
+    justify-content: center;
+    margin-top: 230px; 
+
+        }
+        .time-display {
+            font-size: 50px;
+            font-weight: bold;
+             display: flex;
+    justify-content: center;
+     
+        }
+        .form-btn {
+    display: flex;
+    justify-content: center; /* 横方向中央揃え */
+    align-items: center; 
+    margin-top: 30px;    /* 縦方向中央揃え（必要なら） */
+}
+        .registration-form__btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            color: #f9f5f9;
+            background: #050505;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 10px;
+            width: 120px;
+            font-size: 15px;
+            
+          
+
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }

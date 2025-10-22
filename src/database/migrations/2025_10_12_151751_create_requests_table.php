@@ -15,7 +15,12 @@ class CreateRequestsTable extends Migration
     {
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('attendance_id')->constrained()->cascadeOnDelete();
+            $table->datetime('requested_clock_in');
+            $table->datetime('requested_clock_out')->nullable();
+            $table->text('reason')->nullable();
+            $table->date('applied_date');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }

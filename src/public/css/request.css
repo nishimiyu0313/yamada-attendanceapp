@@ -1,0 +1,37 @@
+.toppage-list {
+    font-size: 15px;
+    display: flex;
+    height: 47px;    
+    top: 127px;
+    border-bottom: 1px solid #000;
+} 
+ 
+.toppage-list h3 {
+  margin: 0;
+}
+.approved {
+    margin-left: 50px;
+}
+.list__inner {
+    margin: 32px auto 0;
+    width: 84%;
+    border: 1px solid #e0dfde;
+    background-color: #ffffff
+}
+
+
+.list__table {
+    margin-top: 16px;
+    width: 100%;
+    border-collapse: collapse;
+}
+.list__row {
+    border: 1px solid #e0dfde;
+}
+
+
+
+.list__label,
+.list__data {
+    padding: 16px 8px;
+}

@@ -1,0 +1,141 @@
+.header {
+   
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    background: #050505;
+    height: 80px;
+    width: 100%;
+    max-width: 1550px;
+}
+
+.header img {
+    width: 300px;
+}
+
+.header__heading {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 35px;
+    margin: 10px;
+    padding-left: 15px;
+}
+.login-form__content {
+  margin: 0 auto;
+  padding: 30px 15px;
+  max-width: 1230px;
+}
+
+.login-form__heading {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form {
+  margin: 0 auto;
+  width: 70%;
+  text-align: center;
+}
+
+.form__group {
+  margin-bottom: 15px;
+}
+
+.form__group-title {
+  text-align: left;
+  margin-left: 80px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.form__error {
+  height: 20px;
+  color: #ff0000;
+  text-align: left;
+  padding-left: 0; 
+  margin-left: 0;
+}
+
+.text-danger {
+  margin-left: 80px;
+}
+
+.form__input--text input {
+  padding: 10px;
+  width: 680px;
+  height: 40px;
+  border: 1px solid #0c0000;
+  border-radius: 3px;
+  text-align: center;
+
+
+  appearance: none;
+}
+
+.form__button {
+  margin-top: 20px;
+}
+
+.form__button-submit {
+  padding: 10px;
+  width: 680px;
+  height: 50px;
+  border: none;
+  border-radius: 3px;
+  color: #f9f5f9;
+  background: #050505;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.register__link {
+  margin-top: 20px;
+  text-align: center;
+}
+
+@media screen and (max-width: 850px) {
+  .header {
+    flex-direction: column;
+    height: auto;
+    align-items: center;
+    padding: 10px 0;
+  }
+  
+    .header__heading {
+    font-size: 25px;
+    padding-left: 10px;
+    margin: 5px;
+  }
+    .form {
+    width: 90%;
+  }
+    .form__group-title {
+    margin-left: 0;
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .form__input--text input,
+  .form__button-submit {
+    width: 100%;
+    max-width: 100%;
+  }
+  .form__input--text input {
+    font-size: 16px;
+  }
+  .form__button-submit {
+    font-size: 16px;
+  }
+  .form__error {
+    text-align: center;
+    font-size: 14px;
+  }
+  .login-form__content {
+    padding: 20px 10px;
+  }
+  .register__link {
+    font-size: 14px;
+  }
+}
