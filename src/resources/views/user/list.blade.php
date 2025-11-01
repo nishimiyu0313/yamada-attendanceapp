@@ -24,14 +24,31 @@
                 <th class="list__label">合計</th>
                 <th class="list__label">詳細</th>
             </tr>
+            @forelse($attendances as $attendance)
             <tr class="list__row">
-                <td class="list__data"></td>
-                <td class="list__data"></td>
-                <td class="list__data"></td>
-                <td class="list__data"></td>
-                <td class="list__data"></td>
+                <td class="list__data">{{ \Carbon\Carbon::parse($attendance->work_date)->format('Y-m-d') }}</td>
+                <td class="list__data">{{ \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') }}</td>
+                <td class="list__data">@if($attendance->clock_out)
+                    {{ \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') }}
+                    @else
+                    -
+                    @endif
+                </td>
+
+
+                <td class="list__data">
+                   
+                </td>
+                <td class="list__data">
+                    
+                </td>
                 <td class="list__data"></td>
             </tr>
+            @empty
+            <tr>
+                <td colspan="6" class="list__data">データがありません。</td>
+            </tr>
+            @endforelse
         </table>
     </div>
 </div>

@@ -15,12 +15,15 @@ class CreateAttendancesTable extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete();
-            $table->date('work_date')->unique();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->date('work_date');
             $table->datetime('clock_in');
-            $table->datetime('clock_out');
+            $table->datetime('clock_out')->nullable();
+            $table->enum('status', ['working', 'breaking', 'finished'])->default('working');
             $table->timestamps();
-        });
+
+            $table->unique(['user_id', 'work_date']); // 複合ユニーク
+            });
     }
 
     /**

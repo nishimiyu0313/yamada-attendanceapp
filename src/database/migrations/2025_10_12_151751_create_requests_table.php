@@ -20,8 +20,13 @@ class CreateRequestsTable extends Migration
             $table->datetime('requested_clock_out')->nullable();
             $table->text('reason')->nullable();
             $table->date('applied_date');
-            $table->string('status')->default('pending');
+            $table->unsignedBigInteger('approver_id')->nullable();
+            $table->foreign('approver_id')->references('id')->on('users')->nullOnDelete();
+
+            $table->enum('status', ['applied', 'approved'])->default('applied');
             $table->timestamps();
+
+           
         });
     }
 
