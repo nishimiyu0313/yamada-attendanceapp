@@ -37,10 +37,47 @@
 
 
                 <td class="list__data">
-                   
+                    @if($attendance->breaks->isNotEmpty())
+                    @foreach($attendance->breaks as $break)
+                    @php
+                    $start = \Carbon\Carbon::parse($break->break_start);
+                    $end = $break->break_end ? \Carbon\Carbon::parse($break->break_end) : now();
+                    $diffMinutes = $start->diffInMinutes($end);
+
+                    $hours = intdiv($diffMinutes, 60);
+                    $minutes = $diffMinutes % 60;
+                    @endphp
+                    {{ $hours }}:{{ str_pad($minutes, 2, '0', STR_PAD_LEFT) }}<br>
+                    @endforeach
+                    @else
+                    -
+                    @endif
                 </td>
                 <td class="list__data">
-                    
+                    @if($attendance->clock_out)
+                    @php
+                    $clockIn = \Carbon\Carbon::parse($attendance->clock_in);
+                    $clockOut = \Carbon\Carbon::parse($attendance->clock_out);
+                    $workMinutes = $clockIn->diffInMinutes($clockOut);
+
+                    // 休憩時間の合計（分）
+                    $breakMinutes = $attendance->breaks->reduce(function($carry, $break) use ($clockOut) {
+                    $start = \Carbon\Carbon::parse($break->break_start);
+                    $end = $break->break_end ? \Carbon\Carbon::parse($break->break_end) : $clockOut;
+                    return $carry + $start->diffInMinutes($end);
+                    }, 0);
+
+                    // 勤務時間から休憩時間を引く
+                    $totalMinutes = $workMinutes - $breakMinutes;
+
+                    $hours = intdiv($totalMinutes, 60);
+                    $minutes = $totalMinutes % 60;
+                    @endphp
+
+                    {{ $hours }}:{{ str_pad($minutes, 2, '0', STR_PAD_LEFT) }}
+                    @else
+                    -
+                    @endif
                 </td>
                 <td class="list__data"></td>
             </tr>

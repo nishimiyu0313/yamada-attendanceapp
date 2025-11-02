@@ -42,22 +42,22 @@
 
     @else
 
-    @if ($status === \App\Models\Attendance::STATUS_WORKING)
+    @if($attendance && $status === \App\Models\Attendance::STATUS_WORKING)
     <form class="form-btn" method="POST" action="{{ route('break.store', $attendance->id) }}">
         @csrf
         <button type="submit" class="registration-form__btn">休憩入り</button>
     </form>
     @endif
 
-    @if ($status === \App\Models\Attendance::STATUS_BREAKING)
+    @if($attendance && $status === \App\Models\Attendance::STATUS_BREAKING)
     @php
     $latestBreak = $attendance->breaks()->whereNull('break_end')->latest()->first();
     @endphp
     @if($latestBreak)
-    <form method="POST" action="{{ route('break.update', [$attendance->id, $latestBreak->id]) }}">
+    <form class="form-btn" method="POST" action="{{ route('break.update', [$attendance->id, $latestBreak->id]) }}">
         @csrf
         @method('PATCH')
-        <button type="submit">休憩戻り</button>
+        <button type="submit" class="registration-form__btn">休憩戻り</button>
     </form>
     @endif
     @endif

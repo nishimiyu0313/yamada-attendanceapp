@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'create'])->name('attendance.create');
     Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
     Route::patch('/attendance/{id}', [AttendanceController::class, 'update'])->name('attendance.update');
-    Route::post('/attendance/{attendance}/break', [BreakController::class, 'store'])->name('break.store');
+    Route::post('/attendance/{attendance_id}/break', [BreakController::class, 'store'])->name('break.store');
     Route::patch('/attendance/{attendance_id}/break/{break_id}', [BreakController::class, 'update'])
         ->name('break.update');
 

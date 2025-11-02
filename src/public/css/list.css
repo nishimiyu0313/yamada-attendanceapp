@@ -26,5 +26,12 @@ body {
 .list__label,
 .list__data {
     padding: 16px 8px;
-   
+    text-align: center;
+    vertical-align: middle;
+}
+
+.list__data {
+    padding: 16px 8px;
+    text-align: center; /* 横方向の中央寄せ */
+    vertical-align: middle; /* 縦方向の中央寄せ（行の中央に） */
 }

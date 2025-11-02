@@ -11,9 +11,10 @@ use Carbon\Carbon;
 class BreakController extends Controller
 {
     // 休憩開始
-    public function store(Attendance $attendance)
+    public function store($attendance_id)
     {
-        // 未終了の休憩がなければ作成
+        $attendance = Attendance::findOrFail($attendance_id);
+        /** @var Attendance $attendance */
         $ongoingBreak = $attendance->breaks()->whereNull('break_end')->first();
         if (!$ongoingBreak) {
             $attendance->breaks()->create([
@@ -26,8 +27,13 @@ class BreakController extends Controller
     }
 
     // 休憩終了
-    public function update(Attendance $attendance, BreakTime $break)
+    public function update($attendance_id, $break_id)
+    
     {
+
+        $attendance = Attendance::findOrFail($attendance_id);
+        $break = BreakTime::findOrFail($break_id);
+        
         if (!$break->break_end) {
             $break->update([
                 'break_end' => Carbon::now(),
