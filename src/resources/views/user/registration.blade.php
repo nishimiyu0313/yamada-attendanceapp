@@ -6,6 +6,17 @@
 
 @section('content')
 <div class="registration-form__content">
+    <div class="status-display">
+        @if (!$attendance)
+        勤務外
+        @elseif($status === \App\Models\Attendance::STATUS_WORKING)
+        出勤中
+        @elseif($status === \App\Models\Attendance::STATUS_BREAKING)
+        休憩中
+        @elseif($attendance->clock_out)
+        退勤済み
+        @endif
+    </div>
     <div class="date-display">
         @php
         $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
@@ -62,21 +73,16 @@
     @endif
     @endif
 
-
-    @if (!$attendance->clock_out)
-    <form class="form-btn" action="{{ route('attendance.update', $attendance->id) }}" method="POST">
-        @csrf
-        @method('PATCH')
-        <button type="submit" class="registration-form__btn">退勤</button>
-    </form>
-    @else
-    <span class="text-muted">お疲れ様でした。</span>
-    @endif
-
-
-    @endif
-
-
-
-
-    @endsection
+    <div class="attendance-footer">
+        @if (!$attendance->clock_out)
+        <form class="form-btn" action="{{ route('attendance.update', $attendance->id) }}" method="POST">
+            @csrf
+            @method('PATCH')
+            <button type="submit" class="registration-form__btn">退勤</button>
+        </form>
+        @else
+        <span class="text-muted">お疲れ様でした。</span>
+        @endif
+    </div>
+        @endif
+        @endsection

@@ -32,6 +32,38 @@ body {
 
 .list__data {
     padding: 16px 8px;
-    text-align: center; /* 横方向の中央寄せ */
-    vertical-align: middle; /* 縦方向の中央寄せ（行の中央に） */
+    text-align: center; 
+    vertical-align: middle; 
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.date-input {
+    font-size: 16px;
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.date-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #555;
+}
+
+.date-btn:hover {
+    color: #000;
+}
+
+.date-selector i {
+    color: #888;
+    font-size: 18px;
 }

@@ -1,51 +1,70 @@
- 
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px; /* 各要素の間隔 */
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-           
-        }
-        .date-display {
-            font-size: 30px;
-            display: flex;
-    justify-content: center;
-    margin-top: 230px; 
-
-        }
-        .time-display {
-            font-size: 50px;
-            font-weight: bold;
-             display: flex;
-    justify-content: center;
-     
-        }
-        .form-btn {
+.container {
     display: flex;
-    justify-content: center; /* 横方向中央揃え */
-    align-items: center; 
-    margin-top: 30px;    /* 縦方向中央揃え（必要なら） */
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; 
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-        .registration-form__btn {
-            padding: 10px 20px;
-            font-size: 18px;
-            color: #f9f5f9;
-            background: #050505;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: bold;
-            padding: 10px;
-            width: 120px;
-            font-size: 15px;
-            
-          
 
-        }
-        .btn:hover {
-            background-color: #45a049;
-        }
+.status-display {
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    text-align: center; 
+    margin-top: px;
+    border-radius: 10px;
+   
+
+}
+
+
+.date-display {
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    margin-top: 200px;
+}
+.time-display {
+    font-size: 50px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+.form-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px; 
+}
+.registration-form__btn {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: #f9f5f9;
+    background: #050505;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+    width: 120px;
+    font-size: 15px;
+}
+.attendance-footer {
+    display: flex;
+    justify-content: center; 
+    align-items: flex-end;   
+    height: 100px;            
+}
+
+.btn:hover {
+    background-color: #45a049;
+}
+
+.text-muted {
+    font-weight: bold;
+}
