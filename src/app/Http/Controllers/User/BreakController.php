@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class BreakController extends Controller
 {
-    // 休憩開始
+    
     public function store($attendance_id)
     {
         $attendance = Attendance::findOrFail($attendance_id);
@@ -26,7 +26,7 @@ class BreakController extends Controller
         return redirect()->route('attendance.create');
     }
 
-    // 休憩終了
+    
     public function update($attendance_id, $break_id)
     
     {

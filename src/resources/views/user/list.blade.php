@@ -12,7 +12,7 @@
             <div class="date-selector">
                 <button id="prevDay" class="date-btn">←前月</button>
 
-               
+
                 <div class="date-center">
                     <i class="fa-solid fa-calendar-days"></i>
                     <input
@@ -22,7 +22,7 @@
                         class="date-input" />
                 </div>
 
-                
+
                 <button id="nextDay" class="date-btn">翌月→</button>
             </div>
 
@@ -32,7 +32,7 @@
                     const prev = document.getElementById('prevDay');
                     const next = document.getElementById('nextDay');
 
-                   
+
                     prev.addEventListener('click', () => {
                         const d = new Date(input.value);
                         d.setDate(d.getDate() - 1);
@@ -47,7 +47,7 @@
                         input.dispatchEvent(new Event('change'));
                     });
 
-                   
+
                     input.addEventListener('change', () => {
                         const date = input.value;
                         window.location.href = `/attendance/${date}`;
@@ -60,7 +60,7 @@
             $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
             $today = \Carbon\Carbon::now();
             @endphp
-          
+
         </div>
         <table class="list__table">
             <tr class="list__row">
@@ -109,14 +109,14 @@
                     $clockOut = \Carbon\Carbon::parse($attendance->clock_out);
                     $workMinutes = $clockIn->diffInMinutes($clockOut);
 
-                   
+
                     $breakMinutes = $attendance->breaks->reduce(function($carry, $break) use ($clockOut) {
                     $start = \Carbon\Carbon::parse($break->break_start);
                     $end = $break->break_end ? \Carbon\Carbon::parse($break->break_end) : $clockOut;
                     return $carry + $start->diffInMinutes($end);
                     }, 0);
 
-                    
+
                     $totalMinutes = $workMinutes - $breakMinutes;
 
                     $hours = intdiv($totalMinutes, 60);
@@ -128,7 +128,9 @@
                     -
                     @endif
                 </td>
-                <td class="list__data"></td>
+                <td class="list__data">
+                    <a href="{{ route('attendance.detail', ['id' => $attendance->id]) }}" class="detail-btn">詳細</a>
+                </td>
             </tr>
             @empty
             <tr>

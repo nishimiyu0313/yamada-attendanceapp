@@ -47,15 +47,15 @@ public function create(Request $request)
 
     public function update($id)
     {
-        // 対象の勤怠データを取得
+        
         $attendance = Attendance::findOrFail($id);
 
-        // すでに退勤済みならエラー防止（任意）
+       
         if ($attendance->clock_out) {
             return redirect()->back()->with('error', 'すでに退勤済みです。');
         }
 
-        // 現在時刻を退勤時間として更新
+        
         $attendance->update([
             'clock_out' => Carbon::now(),
             'status'    => Attendance::STATUS_FINISHED,
@@ -69,11 +69,18 @@ public function create(Request $request)
     {
         $user = Auth::user();
 
-        // ユーザーの勤怠データを日付順に取得
+        
         $attendances = Attendance::where('user_id', $user->id)
             ->orderBy('work_date', 'desc')
             ->get();
         return view('user.list', compact('attendances'));
+    }
+
+    public function show($id)
+    {
+        $attendance = Attendance::with(['user', 'breaks'])->findOrFail($id);
+
+        return view('user.detail', compact('attendance'));
     }
 
 
