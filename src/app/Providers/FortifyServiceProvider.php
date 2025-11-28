@@ -30,10 +30,7 @@ class FortifyServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void
-    {
-       
-    }
+    public function register(): void {}
 
     /**
      * Bootstrap any application services.
@@ -49,18 +46,36 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.login');
         });
 
-        $this->app->bind(\Laravel\Fortify\Http\Requests\LoginRequest::class, LoginRequest::class);
-        Fortify::authenticateUsing(function (Request $request) {
+        //$this->app->bind(\Laravel\Fortify\Http\Requests\LoginRequest::class, LoginRequest::class);
 
+        Fortify::authenticateUsing(function (Request $request) {
 
             $user = User::where('email', $request->email)->first();
 
-            if ($user && Hash::check($request->password, $user->password)) {
-                return $user;
+            if (! $user || ! Hash::check($request->password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'email' => ['ログイン情報が一致しません'],
+                ]);
             }
-            throw ValidationException::withMessages([
-                'email' => ['ログイン情報が一致しません'],
-            ]);
+
+            // もし admin/login からのリクエストなら role チェック
+            if ($request->routeIs('admin.login.post')) {
+                if ($user->role !== 'admin') {
+                    throw ValidationException::withMessages([
+                        'email' => ['管理者のみログインできます'],
+                    ]);
+                }
+            }
+
+            if ($request->routeIs('login')) { // Fortify 標準 login route
+                if ($user->role !== 'user') {
+                    throw ValidationException::withMessages([
+                        'email' => ['ユーザーのみログインできます'],
+                    ]);
+                }
+            }
+
+            return $user;
         });
 
 
@@ -72,6 +87,9 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(10)->by($email . $request->ip());
         });
 
-       
+        $this->app->singleton(
+            \Laravel\Fortify\Contracts\LoginResponse::class,
+            \App\Actions\Fortify\AdminLoginResponse::class
+        );
     }
 }

@@ -15,6 +15,9 @@ class CustomAuthenticatedSessionController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+        if ($request->routeIs('admin.*')) {
+            return redirect('/admin/login');
+        }
         // ログアウト後に飛ばしたいページ
         return redirect('/login');  // ここを好きなURLに変更
     }

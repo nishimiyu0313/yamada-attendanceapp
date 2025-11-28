@@ -2,12 +2,28 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateAttendanceRequest;
 use App\Models\Attendance;
+use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
+    public function index(Request $request)
+    {
+        $currentDate = Carbon::parse($request->query('work_date', Carbon::today()));
+        $prevDate = $currentDate->copy()->subDay()->format('Y-m-d');
+        $nextDate = $currentDate->copy()->subDay()->format('Y-m-d');
+
+        $attendances = Attendance::with('user', 'breaks')
+            ->where('work_date', $currentDate)
+            ->get();
+
+        return view('admin.index', compact('currentDate', 'prevDate', 'nextDate', 'attendances'));
+    }
+
+
     public function show($id)
     {
         $attendance = Attendance::with(['user', 'breaks'])->findOrFail($id);

@@ -18,6 +18,12 @@ class Attendance extends Model
         'status',
     ];
 
+    protected $casts = [
+        'clock_in'  => 'datetime',
+        'clock_out' => 'datetime',
+        'work_date' => 'date',
+    ];
+
     public const STATUS_WORKING  = 'working';
     public const STATUS_BREAKING = 'breaking';
     public const STATUS_FINISHED = 'finished';
@@ -76,5 +82,19 @@ class Attendance extends Model
         $clockOut = $this->clock_out ?? now();
         $workMinutes = $clockOut->diffInMinutes($this->clock_in);
         return $workMinutes - $this->totalBreakMinutes();
+    }
+
+    public function getBreakMinutesTotalAttribute(): int
+    {
+        return $this->breaks->sum(function ($break) {
+            $end = $break->break_end ?? now();
+            return $end->diffInMinutes($break->break_start);
+        });
+    }
+
+    public function getWorkMinutesTotalAttribute(): int
+    {
+        $clockOut = $this->clock_out ?? now();
+        return $clockOut->diffInMinutes($this->clock_in) - $this->break_minutes_total;
     }
 }
