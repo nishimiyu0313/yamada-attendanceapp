@@ -26,7 +26,7 @@
                     <form class="list__form" action="/attendance/list" method="get" novalidate>
                         <button class="header-nav__button">勤怠一覧</button>
                     </form>
-                    <form class="request__form" action="/stamp_correction_request/list" method="get" novalidate>
+                    <form class="request__form" action="/stamp_correction_request/user" method="get" novalidate>
                         <button class="header-nav__button">申請</button>
                     </form>
                     @if (Auth::check())

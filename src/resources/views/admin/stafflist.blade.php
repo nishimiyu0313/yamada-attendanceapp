@@ -19,7 +19,9 @@
                 <tr class="index__row">
                     <td class="index__data">{{ $user->name }}</td>
                     <td class="index__data">{{ $user->email }}</td>
-                    <td class="index__data">詳細</td>
+                    <td class="index__data">
+                        <a href="{{ route('admin.attendance.staff', $user->id) }}" class="detail-btn">詳細</a>
+                    </td>
                 </tr>
                 @endforeach
             </table>

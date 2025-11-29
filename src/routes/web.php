@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AttendanceController as AdminAttendanceController
 use App\Http\Controllers\Auth\CustomAuthenticatedSessionController;
 use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\RequestController as AdminRequestController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -41,7 +42,7 @@ Route::middleware('auth', 'user')->group(function () {
     Route::patch('/attendance/{attendance_id}/break/{break_id}', [UserBreakController::class, 'update'])->name('break.update');
 
     Route::get('/attendance/list', [UserAttendanceController::class, 'index'])->name('attendance.list');
-    Route::get('/stamp_correction_request/list', [UserAttendanceController::class, 'request'])->name('attendance.request');
+    Route::get('/stamp_correction_request/user', [UserAttendanceController::class, 'request'])->name('attendance.request');
 
     Route::get('/attendance/detail/{id}', [UserAttendanceController::class, 'show'])->name('attendance.detail');
 });
@@ -52,6 +53,10 @@ Route::middleware('auth', 'user')->group(function () {
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'index']);
     Route::get('/admin/attendance/{id}', [AdminAttendanceController::class, 'show'])->name('admin.attendance.detail');
-    Route::put('/admin/attendance/{id}', [AdminAttendanceController::class, 'update'])->name('admin.attendance.update');
+    Route::post('/admin/attendance/{id}', [AdminAttendanceController::class, 'request'])->name('admin.attendance.request');
     Route::get('/admin/staff/list', [AdminUserController::class, 'index']);
+    Route::get('/admin/attendance/staff/{id}', [AdminAttendanceController::class, 'staffindex'])->name('admin.attendance.staff');
+    Route::get('/stamp_correction_request/list', [AdminRequestController::class, 'index'])->name('admin.requests');
+    Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminRequestController::class, 'show'])->name('admin.stamp_request.approve');
+
 });

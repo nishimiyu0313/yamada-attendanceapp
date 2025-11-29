@@ -1,23 +1,23 @@
 @extends('layouts.admin')
 
 @section('css')
-<link rel="stylesheet" href="{{ asset('css/admin-index.css')}}">
+<link rel="stylesheet" href="{{ asset('css/attendance.css')}}">
 @endsection
 
 @section('content')
 <div class="index-form__content">
-    <h2 class="index__heading content__heading"> {{ $currentDate->format('Y年m月d日') }}の勤怠</h2>
+    <h2 class="index__heading content__heading"> {{ $staff->name }}の勤怠</h2>
     <div class="index__inner">
         <div class="date-display">
             <div class="date-nav">
-                <a href="?date={{ $prevDate }}" class="btn">← 前日</a>
-                <span class="current-date">{{ $currentDate->format('Y/m/d') }}</span>
-                <a href="?date={{ $nextDate }}" class="btn">翌日 →</a>
+                <a href="?date={{ $prevDate }}" class="btn">← 前月</a>
+                <span class="current-date">{{ $currentDate->format('Y/m/') }}</span>
+                <a href="?date={{ $nextDate }}" class="btn">翌月 →</a>
             </div>
             <div class="date-content">
                 <table class="index__table">
                     <tr class="index__row">
-                        <th class="index__label">名前</th>
+                        <th class="index__label">日付</th>
                         <th class="index__label">出勤</th>
                         <th class="index__label">退勤</th>
                         <th class="index__label">休憩</th>
@@ -26,7 +26,7 @@
                     </tr>
                     @foreach ($attendances as $attendance)
                     <tr class="index__row">
-                        <td class="index__data">{{ $attendance->user->name }}</td>
+                        <td class="index__data">{{ $attendance->work_date }}</td>
                         <td class="index__data">{{ $attendance->clock_in}}</td>
                         <td class="index__data">{{ $attendance->clock_out }}</td>
                         <td class="index__data">{{ $attendance->break_minutes_total }}</td>
@@ -37,14 +37,7 @@
                     </tr>
                     @endforeach
                 </table>
-
-
-
-
-
-
             </div>
-
         </div>
     </div>
 </div>

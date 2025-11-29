@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
@@ -8,10 +8,8 @@
 <div class="detail__content">
     <h2 class="detail__heading content__heading">勤怠詳細</h2>
 
-    <form action="{{ route('admin.attendance.update', $attendance->id) }}" method="POST">
+    <form action="{{ route('admin.attendance.request', $attendance->id) }}" method="POST">
         @csrf
-        @method('PUT')
-
         <div class="detail__inner">
             <table class="detail__table">
                 <tr>
@@ -27,8 +25,11 @@
                 <tr>
                     <th>出勤〜退勤</th>
                     <td class="editable-cell">
-                        <input type="time" name="clock_in" value="{{ \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') }}"> 〜
-                        <input type="time" name="clock_out" value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}">
+                        <input type="time" name="clock_in"
+                            value="{{ old('clock_in', $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}"
+                            required>〜
+                        <input type="time" name="clock_out"
+                            value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}">
                     </td>
                 </tr>
 
@@ -57,8 +58,7 @@
             </table>
 
             <div class="detail__footer">
-                <button type="submit" class="save-btn">変更を保存</button>
-                <a href="{{ url()->previous() }}" class="back-btn">← 一覧に戻る</a>
+                <button type="submit">修正</button>
             </div>
         </div>
     </form>
