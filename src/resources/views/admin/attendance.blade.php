@@ -10,9 +10,9 @@
     <div class="index__inner">
         <div class="date-display">
             <div class="date-nav">
-                <a href="?date={{ $prevDate }}" class="btn">← 前月</a>
+                <a href="?work_date={{ $prevDate }}" class="btn">← 前月</a>
                 <span class="current-date">{{ $currentDate->format('Y/m/') }}</span>
-                <a href="?date={{ $nextDate }}" class="btn">翌月 →</a>
+                <a href="?work_date={{ $nextDate }}" class="btn">翌月 →</a>
             </div>
             <div class="date-content">
                 <table class="index__table">

@@ -32,7 +32,7 @@ class AttendanceController extends Controller
 
         $currentDate = Carbon::parse($request->query('work_date', Carbon::today()));
         $prevDate = $currentDate->copy()->subMonth()->format('Y-m-d');
-        $nextDate = $currentDate->copy()->subMonth()->format('Y-m-d');
+        $nextDate = $currentDate->copy()->addMonth()->format('Y-m-d');
 
         $staff = User::findOrFail($id);
 
@@ -50,49 +50,58 @@ class AttendanceController extends Controller
     public function show($id)
     {
         $attendance = Attendance::with(['user', 'breaks'])->findOrFail($id);
-        return view('admin.detail', compact('attendance'));
+
+        $hasPendingRequest = AttendanceRequest::where('attendance_id', $id)
+            ->where('status', 'applied')
+            ->exists();
+
+        return view('admin.detail', compact('attendance', 'hasPendingRequest'));
     }
 
     public function request(Request $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
 
-        $workDate = \Carbon\Carbon::parse($attendance->work_date)->format('Y-m-d');
+        $workDate = Carbon::parse($attendance->work_date)->format('Y-m-d');
 
-        $requestedClockIn = \Carbon\Carbon::parse($attendance->work_date . ' ' . $request->clock_in);
-        $requestedClockOut = $request->clock_out ? \Carbon\Carbon::parse($attendance->work_date . ' ' . $request->clock_out) : null;
+        $requestedClockIn = Carbon::parse("$workDate {$request->clock_in}");
+        $requestedClockOut = $request->clock_out
+            ? Carbon::parse("$workDate {$request->clock_out}")
+            : null;
 
-        // 修正リクエストの新規登録
-        AttendanceRequest::create([
+        $attendanceRequest =AttendanceRequest::create([
             'attendance_id'        => $attendance->id,
-            'requested_clock_in'   => $requestedClockIn,    // ← ここを Carbon 変数に変更
+            'requested_clock_in'   => $requestedClockIn,
             'requested_clock_out'  => $requestedClockOut,
             'reason'               => $request->note ?? '勤怠修正申請',
             'applied_date'         => now()->toDateString(),
-            'status'               => 'applied',  // 承認待ち
+            'status'               => 'applied',
         ]);
 
-        if ($request->break1_start || $request->break1_end) {
+        // Break 1
+        if ($request->break1_start && $request->break1_end) {
             $break1 = $attendance->breaks()->skip(0)->first();
 
             if ($break1) {
                 RequestBreak::create([
+                    'request_id' => $attendanceRequest->id,
                     'break_id'              => $break1->id,
-                    'requested_break_start' => \Carbon\Carbon::parse($workDate . ' ' . $request->break1_start),
-                    'requested_break_end'   => \Carbon\Carbon::parse($workDate . ' ' . $request->break1_end),
+                    'requested_break_start' => Carbon::parse("$workDate {$request->break1_start}"),
+                    'requested_break_end'   => Carbon::parse("$workDate {$request->break1_end}"),
                 ]);
             }
         }
 
-        
-        if ($request->break2_start || $request->break2_end) {
+        // Break 2
+        if ($request->break2_start && $request->break2_end) {
             $break2 = $attendance->breaks()->skip(1)->first();
 
             if ($break2) {
                 RequestBreak::create([
+                    'request_id' => $attendanceRequest->id,
                     'break_id'              => $break2->id,
-                    'requested_break_start' => $request->break2_start,
-                    'requested_break_end'   => $request->break2_end,
+                    'requested_break_start' => Carbon::parse("$workDate {$request->break2_start}"),
+                    'requested_break_end'   => Carbon::parse("$workDate {$request->break2_end}"),
                 ]);
             }
         }
@@ -101,6 +110,7 @@ class AttendanceController extends Controller
             ->route('admin.requests', ['status' => 'pending'])
             ->with('success', '修正申請を承認待ちに追加しました。');
     }
+
 
 
     /*public function update($request, $id)
@@ -136,4 +146,4 @@ class AttendanceController extends Controller
         return redirect()
             ->route('admin.attendance.detail', $attendance->id)
             ->with('success', '勤怠情報を更新しました。');*/
-    }
+}

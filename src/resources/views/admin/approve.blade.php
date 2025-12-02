@@ -8,15 +8,15 @@
 <div class="detail__content">
     <h2 class="detail__heading content__heading">勤怠詳細</h2>
 
-    <form action="{{ route('admin.attendance.update', $attendance->id) }}" method="POST">
+    <form action="{{ route('admin.stamp_request.update', $attendance->id) }}" method="POST">
         @csrf
-        @method('PUT')
+        @method('PATCH')
 
         <div class="detail__inner">
             <table class="detail__table">
                 <tr>
                     <th>名前</th>
-                    <td>{{ $request->user->name }}</td>
+                    <td>{{ $attendance->user->name ?? '未登録ユーザー' }}</td>
                 </tr>
 
                 <tr>
@@ -55,13 +55,17 @@
                 <tr>
                     <th>備考</th>
                     <td class="editable-cell">
-                        <textarea name="note" rows="3">{{ $attendance->note ?? '' }}</textarea>
+                        <textarea name="reason" rows="3">{{ $request->reason ?? '' }}</textarea>
                     </td>
                 </tr>
             </table>
 
             <div class="detail__footer">
+                @if($attendanceRequest->status === 'applied')
                 <button type="submit">承認</button>
+                @else
+                <span class="approved-label">承認済み</span>
+                @endif
             </div>
         </div>
     </form>

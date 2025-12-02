@@ -7,9 +7,16 @@
 @section('content')
 <div class="attendance-detail">
     <h2>勤怠詳細</h2>
-    <form action="{{ route('attendance.update', ['id' => $attendance->id]) }}" method="POST">
+
+    @if($hasPendingRequest)
+    <div class="alert alert-warning">
+        この勤怠は現在 <strong>承認待ち</strong> の申請があるため、修正できません。
+    </div>
+    @endif
+
+    <form action="{{ route('attendance.store', ['id' => $attendance->id]) }}" method="POST">
         @csrf
-        @method('PUT')
+
         <table class="detail-table">
             <tr>
                 <th>名前</th>
@@ -45,7 +52,9 @@
                 </td>
             </tr>
         </table>
+        @if(!$hasPendingRequest)
         <button type="submit">修正</button>
+        @endif
     </form>
 </div>
 @endsection

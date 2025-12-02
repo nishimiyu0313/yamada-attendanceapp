@@ -11,8 +11,6 @@
         <div class="date-display">
             <div class="date-selector">
                 <button id="prevDay" class="date-btn">←前月</button>
-
-
                 <div class="date-center">
                     <i class="fa-solid fa-calendar-days"></i>
                     <input
@@ -21,8 +19,6 @@
                         value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}"
                         class="date-input" />
                 </div>
-
-
                 <button id="nextDay" class="date-btn">翌月→</button>
             </div>
 

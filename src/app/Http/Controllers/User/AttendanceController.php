@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use Carbon\Carbon;
+use App\Models\Request as AttendanceRequest;
 
 class AttendanceController extends Controller
 {
@@ -78,16 +79,35 @@ public function create(Request $request)
 
     public function show($id)
     {
-        $attendance = Attendance::with(['user', 'breaks'])->findOrFail($id);
+        $attendanceRequest = AttendanceRequest::with('attendance.breaks')
+            ->findOrFail($id);
 
-        return view('user.detail', compact('attendance'));
+        if ($attendanceRequest->attendance->user_id !== auth()->id()) {
+            abort(403); // 他人の勤怠はアクセス禁止
+        }
+
+        $attendance = $attendanceRequest->attendance;
+
+        $hasPendingRequest = AttendanceRequest::where('attendance_id', $id)
+            ->where('status', 'applied')
+            ->exists();
+
+        return view('user.detail', compact('attendance', 'hasPendingRequest'));
     }
-
 
     public function request(Request $request)
     {
-        return view('user.request');
-    }
+        $status = $request->query('status', 'applied');
 
+        $requests = AttendanceRequest::with('attendance.user')
+            ->where('status', $status)
+            ->whereHas('attendance', function ($q) {
+                $q->where('user_id', auth()->id()); // ログインユーザーの勤怠だけ
+            })
+            ->orderBy('applied_date', 'desc')
+            ->get()
+            ->unique('attendance_id');
+        return view('user.request', compact('requests', 'status'));
+    }
 
 }

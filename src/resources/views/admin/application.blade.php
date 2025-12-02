@@ -10,7 +10,7 @@
     <div class="list__inner">
         <div class="date-display">
             <div class="request-buttons">
-                <a href="{{ route('admin.requests', ['status' => 'pending']) }}"
+                <a href="{{ route('admin.requests', ['status' => 'applied']) }}"
                     class="btn {{ $status == 'pending' ? 'active' : '' }}">承認待ち</a>
 
                 <a href="{{ route('admin.requests', ['status' => 'approved']) }}"
@@ -28,8 +28,13 @@
                 </tr>
                 @foreach ($requests as $request)
                 <tr class="index__row">
-                    <td class="index__data">{{ $request->status }}</td>
-                    <td class="index__data">{{ $request->user->name ?? '-'  }}</td>
+                    <td class="index__data">
+                        @if($request->status === 'applied')
+                        承認待ち
+                        @elseif($request->status === 'approved')
+                        承認済み
+                        @endif</td>
+                    <td class="index__data">{{ $request->attendance->user->name ?? '-' }}</td>
                     <td class="index__data">{{ $request->attendance->work_date ?? '-' }}</td>
                     <td class="index__data">{{ $request->reason  }}</td>
                     <td class="index__data">{{ $request->applied_date }}</td>

@@ -8,6 +8,12 @@
 <div class="detail__content">
     <h2 class="detail__heading content__heading">勤怠詳細</h2>
 
+    @if($hasPendingRequest)
+    <div class="alert alert-warning">
+        この勤怠は現在 <strong>承認待ち</strong> の申請があるため、修正できません。
+    </div>
+    @endif
+
     <form action="{{ route('admin.attendance.request', $attendance->id) }}" method="POST">
         @csrf
         <div class="detail__inner">
@@ -52,13 +58,15 @@
                 <tr>
                     <th>備考</th>
                     <td class="editable-cell">
-                        <textarea name="note" rows="3">{{ $attendance->note ?? '' }}</textarea>
+                        <textarea name="reason" rows="3">{{ $attendance->reason ?? '' }}</textarea>
                     </td>
                 </tr>
             </table>
 
             <div class="detail__footer">
+                @if(!$hasPendingRequest)
                 <button type="submit">修正</button>
+                @endif
             </div>
         </div>
     </form>
