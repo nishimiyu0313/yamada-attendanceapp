@@ -27,27 +27,27 @@
                 <tr>
                     <th>出勤〜退勤</th>
                     <td class="editable-cell">
-                        <input type="time" name="clock_in" value="{{ \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') }}"> 〜
-                        <input type="time" name="clock_out" value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}">
+                        <input type="time" name="clock_in" value="{{ $attendanceRequest->requested_clock_in ? \Carbon\Carbon::parse($attendanceRequest->requested_clock_in)->format('H:i') : '' }}"> 〜
+                        <input type="time" name="clock_out" value="{{ $attendanceRequest->requested_clock_out ? \Carbon\Carbon::parse($attendanceRequest->requested_clock_out)->format('H:i') : '' }}">
                     </td>
                 </tr>
 
                 <tr>
                 <tr>
                     <th>休憩1</th>
-                    <td class="editable-cell">
-                        <input type="time" name="break1_start" value="{{ isset($request->breaks[0]) ? \Carbon\Carbon::parse($request->breaks[0]->requested_start)->format('H:i') : '' }}"> 〜
-                        <input type="time" name="break1_end" value="{{ isset($request->breaks[0]) && $request->breaks[0]->requested_end ? \Carbon\Carbon::parse($request->breaks[0]->requested_end)->format('H:i') : '' }}">
-                        <input type="hidden" name="break1_id" value="{{ $request->breaks[0]->id ?? '' }}">
+                    <td class=" editable-cell">
+                        <input type="time" name="break1_start" value="{{ isset($attendanceRequest->breaks[0]) ? \Carbon\Carbon::parse($attendanceRequest->breaks[0]->requested_start)->format('H:i') : '' }}"> 〜
+                        <input type="time" name="break1_end" value="{{ isset($attendanceRequest->breaks[0]) && $attendanceRequest->breaks[0]->requested_end ? \Carbon\Carbon::parse($attendanceRequest->breaks[0]->requested_end)->format('H:i') : '' }}">
+                        <input type="hidden" name="break1_id" value="{{ $attendanceRequest->breaks[0]->id ?? '' }}">
                     </td>
                 </tr>
 
                 <tr>
                     <th>休憩2</th>
                     <td class="editable-cell">
-                        <input type="time" name="break2_start" value="{{ isset($request->breaks[1]) ? \Carbon\Carbon::parse($request->breaks[1]->requested_start)->format('H:i') : '' }}"> 〜
-                        <input type="time" name="break2_end" value="{{ isset($request->breaks[1]) && $request->breaks[1]->requested_end ? \Carbon\Carbon::parse($request->breaks[1]->requested_end)->format('H:i') : '' }}">
-                        <input type="hidden" name="break2_id" value="{{ $request->breaks[1]->id ?? '' }}">
+                        <input type="time" name="break2_start" value="{{ isset($attendanceRequest->breaks[1]) ? \Carbon\Carbon::parse($attendanceRequest->breaks[1]->requested_start)->format('H:i') : '' }}"> 〜
+                        <input type="time" name="break2_end" value="{{ isset($attendanceRequest->breaks[1]) && $attendanceRequest->breaks[1]->requested_end ? \Carbon\Carbon::parse($attendanceRequest->breaks[1]->requested_end)->format('H:i') : '' }}">
+                        <input type="hidden" name="break2_id" value="{{ $attendanceRequest->breaks[1]->id ?? '' }}">
                     </td>
                 </tr>
 
@@ -55,7 +55,7 @@
                 <tr>
                     <th>備考</th>
                     <td class="editable-cell">
-                        <textarea name="reason" rows="3">{{ $request->reason ?? '' }}</textarea>
+                        <textarea name="reason" rows="3">{{ $attendanceRequest->reason ?? ''  }}</textarea>
                     </td>
                 </tr>
             </table>

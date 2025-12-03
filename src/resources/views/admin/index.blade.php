@@ -10,9 +10,9 @@
     <div class="index__inner">
         <div class="date-display">
             <div class="date-nav">
-                <a href="?date={{ $prevDate }}" class="btn">← 前日</a>
+                <a href="?work_date={{ $prevDate }}" class="btn">← 前日</a>
                 <span class="current-date">{{ $currentDate->format('Y/m/d') }}</span>
-                <a href="?date={{ $nextDate }}" class="btn">翌日 →</a>
+                <a href="?work_date={{ $nextDate }}" class="btn">翌日 →</a>
             </div>
             <div class="date-content">
                 <table class="index__table">
@@ -24,13 +24,22 @@
                         <th class="index__label">合計</th>
                         <th class="index__label">詳細</th>
                     </tr>
+
+                    @php
+                    function formatMinutes($minutes) {
+                    $h = floor($minutes / 60);
+                    $m = $minutes % 60;
+                    return sprintf('%d:%02d', $h, $m);
+                    }
+                    @endphp
+
                     @foreach ($attendances as $attendance)
                     <tr class="index__row">
                         <td class="index__data">{{ $attendance->user->name }}</td>
-                        <td class="index__data">{{ $attendance->clock_in}}</td>
-                        <td class="index__data">{{ $attendance->clock_out }}</td>
-                        <td class="index__data">{{ $attendance->break_minutes_total }}</td>
-                        <td class="index__data">{{ $attendance->work_minutes_total }}</td>
+                        <td class="index__data">{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '-' }}</td>
+                        <td class="index__data">{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '-' }}</td>
+                        <td class="index__data">{{ formatMinutes($attendance->break_minutes_total) }}</td>
+                        <td class="index__data">{{ formatMinutes($attendance->work_minutes_total)  }}</td>
                         <td class="index__data">
                             <a href="{{ route('admin.attendance.detail', $attendance->id) }}" class="detail-btn">詳細</a>
                         </td>

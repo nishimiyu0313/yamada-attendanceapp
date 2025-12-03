@@ -14,9 +14,13 @@ class RequestController extends Controller
 {
     public function store(Request $request, $id)
     {
+       
         $attendance = Attendance::findOrFail($id);
+  
 
         $workDate = Carbon::parse($attendance->work_date)->format('Y-m-d');
+
+      
 
         $requestedClockIn = Carbon::parse("$workDate {$request->clock_in}");
         $requestedClockOut = $request->clock_out
@@ -27,41 +31,29 @@ class RequestController extends Controller
             'attendance_id'        => $attendance->id,
             'requested_clock_in'   => $requestedClockIn,
             'requested_clock_out'  => $requestedClockOut,
-            'reason'               => $request->note ?? '勤怠修正申請',
+            'reason'               => $request->reason ?? '勤怠修正申請',
             'applied_date'         => now()->toDateString(),
             'status'               => 'applied',
         ]);
 
         // Break 1
-        if ($request->break1_start && $request->break1_end) {
-            $break1 = $attendance->breaks()->skip(0)->first();
+        foreach ($request->breaks ?? [] as $breakInput) {
+            if (empty($breakInput['id'])) continue;
+            if (empty($breakInput['start']) && empty($breakInput['end'])) continue; // ←追加
 
-            if ($break1) {
-                RequestBreak::create([
-                    'request_id' => $attendanceRequest->id,
-                    'break_id'              => $break1->id,
-                    'requested_break_start' => Carbon::parse("$workDate {$request->break1_start}"),
-                    'requested_break_end'   => Carbon::parse("$workDate {$request->break1_end}"),
-                ]);
-            }
+            RequestBreak::create([
+                'request_id' => $attendanceRequest->id,
+                'break_id'   => $breakInput['id'],
+                'requested_break_start' => !empty($breakInput['start']) ? Carbon::parse("$workDate {$breakInput['start']}") : null,
+                'requested_break_end'   => !empty($breakInput['end']) ? Carbon::parse("$workDate {$breakInput['end']}") : null,
+            ]);
         }
 
-        // Break 2
-        if ($request->break2_start && $request->break2_end) {
-            $break2 = $attendance->breaks()->skip(1)->first();
 
-            if ($break2) {
-                RequestBreak::create([
-                    'request_id' => $attendanceRequest->id,
-                    'break_id'              => $break2->id,
-                    'requested_break_start' => Carbon::parse("$workDate {$request->break2_start}"),
-                    'requested_break_end'   => Carbon::parse("$workDate {$request->break2_end}"),
-                ]);
-            }
-        }
+
 
         return redirect()
-            ->route('attendance.request', ['status' => 'pending'])
+            ->route('attendance.request', ['status' => 'applied'])
             ->with('success', '修正申請を承認待ちに追加しました。');
     }
 

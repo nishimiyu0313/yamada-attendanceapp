@@ -36,7 +36,10 @@
                     承認済み
                     @endif</td>
                 <td class="index__data">{{ $request->attendance->user->name ?? '-' }}</td>
-                <td class="index__data">{{ $request->attendance->work_date ?? '-' }}</td>
+                <td class="index__data">
+                    {{ $request->attendance->work_date ? \Carbon\Carbon::parse($request->attendance->work_date)->format('Y-m-d') : '-' }}
+                </td>
+
                 <td class="index__data">{{ $request->reason  }}</td>
                 <td class="index__data">{{ $request->applied_date }}</td>
                 <td class="index__data">

@@ -14,7 +14,7 @@
         @elseif($status === \App\Models\Attendance::STATUS_BREAKING)
         休憩中
         @elseif($attendance->clock_out)
-        退勤済み
+        退勤済
         @endif
     </div>
     <div class="date-display">
@@ -56,7 +56,7 @@
     @if($attendance && $status === \App\Models\Attendance::STATUS_WORKING)
     <form class="form-btn" method="POST" action="{{ route('break.store', $attendance->id) }}">
         @csrf
-        <button type="submit" class="registration-form__btn">休憩入り</button>
+        <button type="submit" class="registration-form__btn">休憩入</button>
     </form>
     @endif
 
@@ -68,7 +68,7 @@
     <form class="form-btn" method="POST" action="{{ route('break.update', [$attendance->id, $latestBreak->id]) }}">
         @csrf
         @method('PATCH')
-        <button type="submit" class="registration-form__btn">休憩戻り</button>
+        <button type="submit" class="registration-form__btn">休憩戻</button>
     </form>
     @endif
     @endif

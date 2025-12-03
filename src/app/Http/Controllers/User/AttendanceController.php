@@ -69,31 +69,46 @@ public function create(Request $request)
     public function index(Request $request)
     {
         $user = Auth::user();
+        $currentDate = $request->query('work_date') ? Carbon::parse($request->query('work_date')) : Carbon::today();
+        $prevDate = $currentDate->copy()->subMonth()->format('Y-m-d');
+        $nextDate = $currentDate->copy()->addMonth()->format('Y-m-d');
 
-        
+        $startOfMonth = $currentDate->copy()->startOfMonth();
+        $endOfMonth = $currentDate->copy()->endOfMonth();
+
+        $dates = [];
+        for ($date = $startOfMonth; $date->lte($endOfMonth); $date->addDay()) {
+            $dates[] = $date->copy();
+        }
+
         $attendances = Attendance::where('user_id', $user->id)
-            ->orderBy('work_date', 'desc')
-            ->get();
-        return view('user.list', compact('attendances'));
+            ->whereMonth('work_date', $currentDate->month)
+            ->whereYear('work_date', $currentDate->year)
+            ->orderBy('work_date', 'asc')
+            ->get()
+            ->keyBy(fn($item) => $item->work_date->format('Y-m-d'));
+
+        return view('user.list', compact('dates', 'attendances', 'currentDate', 'prevDate', 'nextDate'));
     }
+
+    
 
     public function show($id)
     {
-        $attendanceRequest = AttendanceRequest::with('attendance.breaks')
+        $attendance = Attendance::with('breaks')
             ->findOrFail($id);
 
-        if ($attendanceRequest->attendance->user_id !== auth()->id()) {
+        if ($attendance->user_id !== auth()->id()) {
             abort(403); // 他人の勤怠はアクセス禁止
         }
 
-        $attendance = $attendanceRequest->attendance;
-
-        $hasPendingRequest = AttendanceRequest::where('attendance_id', $id)
+        $hasPendingRequest = AttendanceRequest::where('attendance_id', $attendance->id)
             ->where('status', 'applied')
             ->exists();
 
         return view('user.detail', compact('attendance', 'hasPendingRequest'));
     }
+
 
     public function request(Request $request)
     {

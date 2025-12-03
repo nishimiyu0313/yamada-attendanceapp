@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateAttendanceRequest;
 use App\Models\Request as AttendanceRequest;
-use App\Models\Attendance;
+use App\Models\BreakTime;
 use App\Models\User;
 use Carbon\Carbon;
 
@@ -37,26 +37,31 @@ class RequestController extends Controller
     public function update($id)
     {
         // 修正申請を取得（AttendanceRequest + RequestBreak）
-        $request = AttendanceRequest::with('attendance', 'breaks.break')->findOrFail($id);
+        $attendanceRequest = AttendanceRequest::with('attendance', 'breaks.break')->findOrFail($id);
 
-        $attendance = $request->attendance;
+        $attendance = $attendanceRequest->attendance;
 
-        $attendance->clock_in = $request->requested_clock_in;
-        $attendance->clock_out = $request->requested_clock_out;
+        $attendance->clock_in = $attendanceRequest->requested_clock_in;
+        $attendance->clock_out = $attendanceRequest->requested_clock_out;
         $attendance->save();
 
-        foreach ($request->breaks as $requestBreak) {
-            $attendanceBreak = $attendance->breaks()->where('id', $requestBreak->break_id)->first();
-            if ($attendanceBreak) {
-                $attendanceBreak->break_start = $requestBreak->requested_break_start;
-                $attendanceBreak->break_end   = $requestBreak->requested_break_end;
-                $attendanceBreak->save();
+
+
+        foreach ($attendanceRequest->breaks as $reqBreak) {
+
+            // break_times の元データを取得
+            $break = BreakTime::find($reqBreak->break_id);
+
+            if ($break) {
+                $break->break_start = $reqBreak->requested_break_start;
+                $break->break_end   = $reqBreak->requested_break_end;
+                $break->save();
             }
         }
 
-        $request->status = 'approved';
-        $request->approver_id = auth()->id();
-        $request->save();
+        $attendanceRequest->status = 'approved';
+        $attendanceRequest->approver_id = auth()->id();
+        $attendanceRequest->save();
 
         return redirect()
             ->route('admin.requests', ['status' => 'approved'])

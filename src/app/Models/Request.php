@@ -9,6 +9,8 @@ class Request extends Model
 {
     use HasFactory;
 
+    protected $table = 'requests'; 
+
     protected $fillable = [
         'attendance_id',
         'requested_clock_in',
