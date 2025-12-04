@@ -12,10 +12,10 @@ use Carbon\Carbon;
 
 class RequestController extends Controller
 {
-    public function store(Request $request, $id)
-    {
        
-        $attendance = Attendance::findOrFail($id);
+       public function store(Request $request, $id)
+{
+    $attendance = Attendance::findOrFail($id);
   
 
         $workDate = Carbon::parse($attendance->work_date)->format('Y-m-d');

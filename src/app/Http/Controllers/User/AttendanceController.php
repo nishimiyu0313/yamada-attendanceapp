@@ -102,11 +102,37 @@ public function create(Request $request)
             abort(403); // 他人の勤怠はアクセス禁止
         }
 
-        $hasPendingRequest = AttendanceRequest::where('attendance_id', $attendance->id)
-            ->where('status', 'applied')
-            ->exists();
+       
 
-        return view('user.detail', compact('attendance', 'hasPendingRequest'));
+
+        return view('user.detail', [
+            'attendance' => $attendance,
+            'isEditable' => $attendance->can_edit, // 修正可能かどうか
+            'message' => $attendance->can_edit ? null : '修正申請中のため修正できません。', // 修正不可ならメッセージ
+        ]);
+    }
+
+    public function showrequest($id)
+    {
+
+        $request = AttendanceRequest::with('attendance.breaks')->findOrFail($id);
+        $attendance = $request->attendance;
+        
+
+        if (!$attendance) {
+            abort(404, '勤怠情報が見つかりません');
+        }
+
+        if ($attendance->user_id !== auth()->id()) {
+            abort(403);
+           
+        }
+       
+        return view('user.detail', [
+            'attendance' => $attendance,
+            'isEditable' => $attendance->can_edit,
+            'message' => $attendance->can_edit ? null : '承認待ちのため修正できません。',
+        ]);
     }
 
 
@@ -121,7 +147,9 @@ public function create(Request $request)
             })
             ->orderBy('applied_date', 'desc')
             ->get()
-            ->unique('attendance_id');
+            ->unique('attendance_id', true);
+
+
         return view('user.request', compact('requests', 'status'));
     }
 

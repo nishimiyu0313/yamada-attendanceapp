@@ -39,6 +39,12 @@ class Attendance extends Model
         return $this->hasMany(BreakTime::class);
     }
 
+    public function requests()
+    {
+        return $this->hasMany(Request::class);
+    }
+
+
     public function getStatusLabelAttribute(): string
     {
         return match ($this->status) {
@@ -96,5 +102,15 @@ class Attendance extends Model
     {
         $clockOut = $this->clock_out ?? now();
         return $clockOut->diffInMinutes($this->clock_in) - $this->break_minutes_total;
+    }
+
+    public function getCanEditAttribute()
+    {
+        // 承認待ちの申請があれば修正不可
+        $hasPendingRequest = $this->requests()
+            ->where('status', 'applied')
+            ->exists();
+
+        return !$hasPendingRequest;
     }
 }

@@ -47,6 +47,7 @@ Route::middleware('auth', 'user')->group(function () {
 
     Route::get('/attendance/detail/{id}', [UserAttendanceController::class, 'show'])->name('attendance.detail');
     Route::post('/attendance/detail/{id}', [UserRequestController::class, 'store'])->name('attendance.store');
+    Route::get('/attendance/request/{id}', [UserAttendanceController::class, 'showrequest'])->name('attendance.detailrequest');
 });
 
 // ======================

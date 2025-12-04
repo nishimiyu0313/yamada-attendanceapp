@@ -27,42 +27,32 @@ class AttendanceController extends Controller
         return view('admin.index', compact('currentDate', 'prevDate', 'nextDate', 'attendances'));
     }
 
+    
     public function staffindex(Request $request, $id)
     {
         $staff = User::findOrFail($id);
-
-        $currentDate = $request->query('work_date')
-            ? Carbon::parse($request->query('work_date'))
-            : Carbon::today();
-
+        $currentDate = $request->query('work_date') ? Carbon::parse($request->query('work_date')) : Carbon::today();
         $prevDate = $currentDate->copy()->subMonth()->format('Y-m-d');
         $nextDate = $currentDate->copy()->addMonth()->format('Y-m-d');
 
         $startOfMonth = $currentDate->copy()->startOfMonth();
         $endOfMonth = $currentDate->copy()->endOfMonth();
 
-        // 月の日付配列
         $dates = [];
         for ($date = $startOfMonth; $date->lte($endOfMonth); $date->addDay()) {
             $dates[] = $date->copy();
         }
 
-        // 勤怠データを取得（1人分）
         $attendances = Attendance::where('user_id', $staff->id)
-            ->whereBetween('work_date', [$startOfMonth->format('Y-m-d'), $endOfMonth->format('Y-m-d')])
+            ->whereMonth('work_date', $currentDate->month)
+            ->whereYear('work_date', $currentDate->year)
             ->orderBy('work_date', 'asc')
             ->get()
             ->keyBy(fn($item) => $item->work_date->format('Y-m-d'));
 
-        return view('admin.attendance', compact(
-            'staff',
-            'dates',
-            'attendances',
-            'currentDate',
-            'prevDate',
-            'nextDate'
-        ));
+        return view('admin.attendance', compact('staff', 'dates', 'attendances', 'currentDate', 'prevDate', 'nextDate'));
     }
+
 
 
 

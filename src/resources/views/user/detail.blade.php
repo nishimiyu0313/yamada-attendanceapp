@@ -19,17 +19,23 @@
                 <th>日付</th>
                 <td>{{ \Carbon\Carbon::parse($attendance->work_date)->format('Y年m月d日') }}</td>
             </tr>
+            @php
+            $requestData = $attendance->requests()->latest()->first();
+            @endphp
             <tr>
                 <th>出勤・退勤</th>
                 <td class="editable">
-                    <input type="time" name="clock_in" value="{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}">
-                    <input type="time" name="clock_out" value="{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}">
+                    <input type="time" name="clock_in"
+                        value="{{ old('clock_in', $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}"
+                        @unless($isEditable) disabled @endunless>
 
+                    <input type="time" name="clock_out"
+                        value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}"
+                        @unless($isEditable) disabled @endunless>
                 </td>
             </tr>
-            @php
-            $breakCount = count($attendance->breaks);
-            @endphp
+
+            @php $breakCount = count($attendance->breaks); @endphp
 
             @foreach($attendance->breaks as $index => $break)
             <tr>
@@ -37,9 +43,11 @@
                 <td class="editable">
                     <input type="hidden" name="breaks[{{ $index }}][id]" value="{{ $break->id }}">
                     <input type="time" name="breaks[{{ $index }}][start]"
-                        value="{{ $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '' }}">
+                        value="{{ old("breaks.$index.start", $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '') }}"
+                        @unless($isEditable) disabled @endunless>
                     <input type="time" name="breaks[{{ $index }}][end]"
-                        value="{{ $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '' }}">
+                        value="{{ old("breaks.$index.end", $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '') }}"
+                        @unless($isEditable) disabled @endunless>
                 </td>
             </tr>
             @endforeach
@@ -54,18 +62,26 @@
                 </tr>
                 @endfor
 
-
-
-
                 <tr>
                     <th>備考</th>
                     <td class="editable">
-                        <textarea name="reason">{{ $attendance->reason }}</textarea>
+                        <textarea name="reason" @unless($isEditable) disabled @endunless>{{ $attendance->reason }}</textarea>
                     </td>
                 </tr>
         </table>
 
+
+        @if($isEditable)
         <button type="submit">修正</button>
+        @endif
+        @if($message)
+        <div class="alert alert-warning">{{ $message }}</div>
+        @endif
+
+
+
+
+
 
 
     </form>

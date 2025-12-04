@@ -43,7 +43,7 @@
                 <td class="index__data">{{ $request->reason  }}</td>
                 <td class="index__data">{{ $request->applied_date }}</td>
                 <td class="index__data">
-                    <a href="{{ route('attendance.detail', $request->id)  }}" class="detail-btn">詳細</a>
+                    <a href="{{ route('attendance.detailrequest', $request->id)  }}" class="detail-btn">詳細</a>
                 </td>
             </tr>
             @endforeach
