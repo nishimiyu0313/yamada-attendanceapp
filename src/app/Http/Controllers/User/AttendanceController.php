@@ -132,6 +132,8 @@ public function create(Request $request)
         ]);
     }
 
+    
+
     public function request(Request $request)
     {
         $status = $request->query('status', 'applied');

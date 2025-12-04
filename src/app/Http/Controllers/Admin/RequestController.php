@@ -26,9 +26,9 @@ class RequestController extends Controller
         return view('admin.application', compact('requests', 'status'));
     }
 
-    public function show($id)
+    public function show($attendance_correct_request_id)
     {
-        $attendanceRequest = AttendanceRequest::with('attendance.user', 'breaks')->findOrFail($id);
+        $attendanceRequest = AttendanceRequest::with('attendance.user', 'breaks')->findOrFail($attendance_correct_request_id);
 
         $attendance = $attendanceRequest->attendance;
 
@@ -36,20 +36,24 @@ class RequestController extends Controller
         return view('admin.approve', compact('attendanceRequest', 'attendance'));
     }
 
-    public function update($id)
+    public function update($attendance_correct_request_id)
     {
-        $attendanceRequest = AttendanceRequest::with('attendance', 'breaks.break')->findOrFail($id);
+        $attendanceRequest = AttendanceRequest::with('attendance', 'breaks.break')->findOrFail($attendance_correct_request_id);
 
         if ($attendanceRequest->status === 'approved') {
             return redirect()->back()->with('error', 'この申請は既に承認されています。');
         }
 
         DB::transaction(function () use ($attendanceRequest) {
+
+            // Attendance を更新
             $attendance = $attendanceRequest->attendance;
             $attendance->clock_in  = $attendanceRequest->requested_clock_in;
             $attendance->clock_out = $attendanceRequest->requested_clock_out;
+            // $attendance->reason = ... ← これは入れない
             $attendance->save();
 
+            // BreakTime を更新
             foreach ($attendanceRequest->breaks as $reqBreak) {
                 $break = BreakTime::find($reqBreak->break_id);
                 if ($break) {
@@ -59,6 +63,7 @@ class RequestController extends Controller
                 }
             }
 
+            // 申請を承認済みに更新
             $attendanceRequest->status = 'approved';
             $attendanceRequest->approver_id = Auth::id();
             $attendanceRequest->save();
