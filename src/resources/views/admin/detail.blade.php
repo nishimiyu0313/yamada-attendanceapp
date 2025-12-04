@@ -8,12 +8,6 @@
 <div class="detail__content">
     <h2 class="detail__heading content__heading">勤怠詳細</h2>
 
-    @if($hasPendingRequest)
-    <div class="alert alert-warning">
-        この勤怠は現在 <strong>承認待ち</strong> の申請があるため、修正できません。
-    </div>
-    @endif
-
     <form action="{{ route('admin.attendance.request', $attendance->id) }}" method="POST">
         @csrf
         <div class="detail__inner">
@@ -33,40 +27,54 @@
                     <td class="editable-cell">
                         <input type="time" name="clock_in"
                             value="{{ old('clock_in', $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '') }}"
-                            required>〜
+                            @unless($isEditable) disabled @endunless> 〜
                         <input type="time" name="clock_out"
-                            value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}">
+                            value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}"
+                            @unless($isEditable) disabled @endunless>
                     </td>
                 </tr>
 
+                @foreach($attendance->breaks as $index => $break)
                 <tr>
-                    <th>休憩1</th>
+                    <th>休憩{{ $index + 1 }}</th>
                     <td class="editable-cell">
-                        <input type="time" name="break1_start" value="{{ isset($attendance->breaks[0]) ? \Carbon\Carbon::parse($attendance->breaks[0]->break_start)->format('H:i') : '' }}"> 〜
-                        <input type="time" name="break1_end" value="{{ isset($attendance->breaks[0]) && $attendance->breaks[0]->break_end ? \Carbon\Carbon::parse($attendance->breaks[0]->break_end)->format('H:i') : '' }}">
+                        <input type="hidden" name="breaks[{{ $index }}][id]" value="{{ $break->id }}">
+                        <input type="time" name="breaks[{{ $index }}][start]"
+                            value="{{ old("breaks.$index.start", $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '') }}"
+                            @unless($isEditable) disabled @endunless>
+                        〜
+                        <input type="time" name="breaks[{{ $index }}][end]"
+                            value="{{ old("breaks.$index.end", $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '') }}"
+                            @unless($isEditable) disabled @endunless>
                     </td>
                 </tr>
+                @endforeach
 
-                <tr>
-                    <th>休憩2</th>
+                @for($i = count($attendance->breaks); $i < 2; $i++)
+                    <tr>
+                    <th>休憩{{ $i + 1 }}</th>
                     <td class="editable-cell">
-                        <input type="time" name="break2_start" value="{{ isset($attendance->breaks[1]) ? \Carbon\Carbon::parse($attendance->breaks[1]->break_start)->format('H:i') : '' }}"> 〜
-                        <input type="time" name="break2_end" value="{{ isset($attendance->breaks[1]) && $attendance->breaks[1]->break_end ? \Carbon\Carbon::parse($attendance->breaks[1]->break_end)->format('H:i') : '' }}">
+                        <input type="time" name="breaks[{{ $i }}][start]" value="" disabled>
+                        〜
+                        <input type="time" name="breaks[{{ $i }}][end]" value="" disabled>
                     </td>
-                </tr>
+                    </tr>
+                    @endfor
 
-                <tr>
-                    <th>備考</th>
-                    <td class="editable-cell">
-                        <textarea name="reason" rows="3">{{ $attendance->reason ?? '' }}</textarea>
-                    </td>
-                </tr>
+                    <tr>
+                        <th>備考</th>
+                        <td class="editable-cell">
+                            <textarea name="reason" @unless($isEditable) disabled @endunless>{{ old('reason', $attendance->reason) }}</textarea>
+                        </td>
+                    </tr>
             </table>
 
             <div class="detail__footer">
-                @if(!$hasPendingRequest)
-                <button type="submit">修正</button>
+                @if(!$isEditable)
+                <div class="alert alert-warning">{{ $message }}</div>
                 @endif
+
+                <button type="submit" @unless($isEditable) disabled @endunless>修正</button>
             </div>
         </div>
     </form>

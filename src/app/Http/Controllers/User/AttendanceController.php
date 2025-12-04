@@ -91,7 +91,7 @@ public function create(Request $request)
         return view('user.list', compact('dates', 'attendances', 'currentDate', 'prevDate', 'nextDate'));
     }
 
-    
+
 
     public function show($id)
     {
@@ -102,13 +102,11 @@ public function create(Request $request)
             abort(403); // 他人の勤怠はアクセス禁止
         }
 
-       
-
 
         return view('user.detail', [
             'attendance' => $attendance,
             'isEditable' => $attendance->can_edit, // 修正可能かどうか
-            'message' => $attendance->can_edit ? null : '修正申請中のため修正できません。', // 修正不可ならメッセージ
+            'message' => $attendance->can_edit ? null : '修正待ちのため修正できません。', // 修正不可ならメッセージ
         ]);
     }
 
@@ -117,7 +115,7 @@ public function create(Request $request)
 
         $request = AttendanceRequest::with('attendance.breaks')->findOrFail($id);
         $attendance = $request->attendance;
-        
+
 
         if (!$attendance) {
             abort(404, '勤怠情報が見つかりません');
@@ -125,16 +123,14 @@ public function create(Request $request)
 
         if ($attendance->user_id !== auth()->id()) {
             abort(403);
-           
         }
-       
+
         return view('user.detail', [
             'attendance' => $attendance,
             'isEditable' => $attendance->can_edit,
             'message' => $attendance->can_edit ? null : '承認待ちのため修正できません。',
         ]);
     }
-
 
     public function request(Request $request)
     {

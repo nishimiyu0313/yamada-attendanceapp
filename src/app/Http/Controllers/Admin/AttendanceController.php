@@ -61,16 +61,32 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::with(['user', 'breaks'])->findOrFail($id);
 
+        // 承認待ちの申請があるかどうか
         $hasPendingRequest = AttendanceRequest::where('attendance_id', $id)
             ->where('status', 'applied')
             ->exists();
 
-        return view('admin.detail', compact('attendance', 'hasPendingRequest'));
+        // 修正可能かどうかのフラグ
+        $isEditable = !$hasPendingRequest;
+
+        // 管理者用メッセージ
+        $message = $isEditable ? null : 'この勤怠は承認待ちの申請があるため修正できません。';
+
+        return view('admin.detail', [
+            'attendance' => $attendance,
+            'isEditable' => $isEditable,
+            'message' => $message,
+        ]);
     }
 
     public function request(Request $request, $id)
     {
         $attendance = Attendance::findOrFail($id);
+
+        if ($attendance->requests()->where('status', 'approved')->exists()) {
+            return redirect()->back()->with('error', '既に承認済みの申請があります。修正できません。');
+        }
+
 
         $workDate = Carbon::parse($attendance->work_date)->format('Y-m-d');
 
