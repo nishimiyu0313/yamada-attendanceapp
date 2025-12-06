@@ -11,7 +11,7 @@
         <div class="date-display">
             <div class="request-buttons">
                 <a href="{{ route('admin.requests', ['status' => 'applied']) }}"
-                    class="btn {{ $status == 'pending' ? 'active' : '' }}">承認待ち</a>
+                    class="btn {{ $status == 'applied' ? 'active' : '' }}">承認待ち</a>
 
                 <a href="{{ route('admin.requests', ['status' => 'approved']) }}"
                     class="btn {{ $status == 'approved' ? 'active' : '' }}">承認済み</a>
@@ -35,7 +35,8 @@
                         承認済み
                         @endif</td>
                     <td class="index__data">{{ $request->attendance->user->name ?? '-' }}</td>
-                    <td class="index__data">{{ $request->attendance->work_date ?? '-' }}</td>
+                    <td class="index__data">{{ $request->attendance->work_date ? \Carbon\Carbon::parse($request->attendance->work_date)->format('Y-m-d') : '-' }}</td>
+                  
                     <td class="index__data">{{ $request->reason  }}</td>
                     <td class="index__data">{{ $request->applied_date }}</td>
                     <td class="index__data">

@@ -70,11 +70,12 @@
             </table>
 
             <div class="detail__footer">
-                @if(!$isEditable)
+                @if($isEditable)
+                <button type="submit">修正</button>
+                @endif
+                @if($message)
                 <div class="alert alert-warning">{{ $message }}</div>
                 @endif
-
-                <button type="submit" @unless($isEditable) disabled @endunless>修正</button>
             </div>
         </div>
     </form>

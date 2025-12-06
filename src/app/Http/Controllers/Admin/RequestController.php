@@ -16,11 +16,11 @@ class RequestController extends Controller
 {
     public function index(Request $request)
     {
-        $status = $request->query('status', 'pending');
+        $status = $request->query('status', 'applied');
 
         $requests = AttendanceRequest::with('attendance.user')
             ->where('status', $status)
-            ->orderBy('applied_date', 'desc')
+            ->orderBy('applied_date', 'asc')
             ->get()
             ->unique('attendance_id'); 
         return view('admin.application', compact('requests', 'status'));
