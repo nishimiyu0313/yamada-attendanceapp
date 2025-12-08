@@ -20,9 +20,16 @@
                         <td>{{ $attendanceRequest->attendance->user->name ?? '未登録ユーザー' }}</td>
                     </tr>
 
+                    @php
+                    $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
+                    $today = \Carbon\Carbon::now();
+                    @endphp
+
                     <tr>
                         <th>日付</th>
-                        <td>{{ \Carbon\Carbon::parse($attendanceRequest->attendance->work_date)->format('Y年m月d日(D)') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($attendanceRequest->attendance->work_date)->format('Y年m月d日') }}
+                            ({{ $weekdays[\Carbon\Carbon::parse($attendance->work_date)->dayOfWeek] }})
+                        </td>
                     </tr>
 
                     <tr>
@@ -33,16 +40,15 @@
                         </td>
                     </tr>
 
-                    @foreach($attendanceRequest->breaks as $index => $break)
+                    @foreach($attendance->breaks as $index => $break)
                     <tr>
                         <th>休憩{{ $index + 1 }}</th>
                         <td>
-                            {{ $break->requested_break_start ? \Carbon\Carbon::parse($break->requested_break_start)->format('H:i') : '-' }} 〜
-                            {{ $break->requested_break_end ? \Carbon\Carbon::parse($break->requested_break_end)->format('H:i') : '-' }}
+                            {{ $break->break_start ? \Carbon\Carbon::parse($break->break_start)->format('H:i') : '-' }} 〜
+                            {{ $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '-' }}
                         </td>
                     </tr>
                     @endforeach
-
                     <tr>
                         <th>備考</th>
                         <td>{{ $attendanceRequest->reason ?? '-' }}</td>

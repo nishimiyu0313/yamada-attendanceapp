@@ -84,7 +84,14 @@ class AttendanceController extends Controller
         $attendance = Attendance::with('breaks')->findOrFail($id);
 
         $workDate = Carbon::parse($attendance->work_date)->format('Y-m-d');
+        $today = Carbon::today()->format('Y-m-d');
 
+        if ($workDate === $today) {
+            return redirect()->back()->with('error', '当日の勤怠は修正申請できません。');
+        }
+        
+        
+        
         $hasPendingRequest = AttendanceRequest::whereHas('attendance', function ($q) use ($workDate) {
             $q->where('work_date', $workDate);
         })->where('status', 'applied')->exists();

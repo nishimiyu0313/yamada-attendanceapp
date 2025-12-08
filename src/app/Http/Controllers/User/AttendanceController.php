@@ -102,6 +102,25 @@ public function create(Request $request)
             abort(403); // 他人の勤怠はアクセス禁止
         }
 
+        $latestRequest = $attendance->requests()->with('breaks')->latest()->first();
+
+        if ($latestRequest) {
+
+            // 出勤・退勤の反映
+            $attendance->clock_in  = $latestRequest->requested_clock_in;
+            $attendance->clock_out = $latestRequest->requested_clock_out;
+
+            // 休憩の反映
+            foreach ($attendance->breaks as $break) {
+                $reqBreak = $latestRequest->breaks?->where('break_id', $break->id)->first();
+
+                if ($reqBreak) {
+                    $break->break_start = $reqBreak->requested_break_start;
+                    $break->break_end   = $reqBreak->requested_break_end;
+                }
+            }
+        }
+
 
         return view('user.detail', [
             'attendance' => $attendance,
@@ -124,6 +143,18 @@ public function create(Request $request)
         if ($attendance->user_id !== auth()->id()) {
             abort(403);
         }
+
+        $attendance->clock_in  = $request->requested_clock_in;
+        $attendance->clock_out = $request->requested_clock_out;
+
+        foreach ($attendance->breaks as $break) {
+            $reqBreak = $request->breaks?->where('break_id', $break->id)->first();
+            if ($reqBreak) {
+                $break->break_start = $reqBreak->requested_break_start;
+                $break->break_end   = $reqBreak->requested_break_end;
+            }
+        }
+
 
         return view('user.detail', [
             'attendance' => $attendance,

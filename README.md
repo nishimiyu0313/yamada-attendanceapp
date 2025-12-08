@@ -1,5 +1,5 @@
 ## アプリケーション名
-coachtech 勤怠ア管理アプリ
+coachtech 勤怠管理アプリ
 
 ## 環境構築
 ```
@@ -17,7 +17,7 @@ DB_PASSWORD=laravel_pass
 ---
 
 Laravelをインストール
-1docker-compose exec php bash
+1 docker-compose exec php bash
 2 composer install
 
 アプリケーションキーを作成

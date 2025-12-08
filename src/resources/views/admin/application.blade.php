@@ -46,8 +46,10 @@
                 </tr>
                 @endforeach
             </table>
-
         </div>
+    </div>
+    <div class="pagination">
+        {{ $requests->appends(request()->query())->links('vendor.pagination.semantic-ui') }}
     </div>
 </div>
 @endsection

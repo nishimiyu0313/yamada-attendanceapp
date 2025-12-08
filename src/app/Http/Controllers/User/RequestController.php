@@ -16,9 +16,13 @@ class RequestController extends Controller
        public function store(Request $request, $id)
 {
     $attendance = Attendance::findOrFail($id);
-  
 
+        $today = Carbon::today()->format('Y-m-d');
         $workDate = Carbon::parse($attendance->work_date)->format('Y-m-d');
+
+        if ($workDate === $today) {
+            return back()->with('error', '当日の勤怠は修正申請できません。');
+        }
 
       
 

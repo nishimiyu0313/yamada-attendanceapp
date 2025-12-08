@@ -89,7 +89,12 @@
                 </table>
             </div>
 
-
+            @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
+            
             @if($isEditable)
             <button type="submit" class="detail-submit">修正</button>
             @endif

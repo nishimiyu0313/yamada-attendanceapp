@@ -22,7 +22,7 @@ class CreateAttendancesTable extends Migration
             $table->enum('status', ['working', 'breaking', 'finished'])->default('working');
             $table->timestamps();
 
-            $table->unique(['user_id', 'work_date']); // 複合ユニーク
+            $table->unique(['user_id', 'work_date']); 
             });
     }
 
