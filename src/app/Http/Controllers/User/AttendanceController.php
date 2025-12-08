@@ -33,7 +33,7 @@ public function create(Request $request)
             ->exists();
 
         if ($exists) {
-            return redirect()->back()->with('status', '本日はすでに出勤済みです。');
+            return redirect()->back();
         }
 
         Attendance::create([
@@ -43,7 +43,7 @@ public function create(Request $request)
             'status'    => Attendance::STATUS_WORKING,
         ]);
 
-        return redirect()->back()->with('status', '出勤しました。');
+        return redirect()->back();
     }
 
     public function update($id)

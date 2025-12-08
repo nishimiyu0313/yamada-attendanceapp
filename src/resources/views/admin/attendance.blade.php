@@ -5,14 +5,14 @@
 @endsection
 
 @section('content')
-<div class="index-form__content">
-    <h2 class="index__heading content__heading"> {{ $staff->name }}の勤怠</h2>
-    <div class="index__inner">
+<div class="attendance-form__content">
+    <div class="attendance__inner">
+        <h2 class="attendance__heading content__heading"> {{ $staff->name }}の勤怠</h2>
         <div class="date-display">
             <div class="date-nav">
-                <a href="?work_date={{ $prevDate }}" class="btn">← 前月</a>
-                <span class="current-date">{{ $currentDate->format('Y/m/') }}</span>
-                <a href="?work_date={{ $nextDate }}" class="btn">翌月 →</a>
+                <a href="?work_date={{ $prevDate }}" class="month-btn">← 前月</a>
+                <span class="current-date">{{ $currentDate->format('Y/m') }}</span>
+                <a href="?work_date={{ $nextDate }}" class="month-btn">翌月 →</a>
             </div>
 
             <script>
@@ -51,14 +51,14 @@
             @endphp
 
         </div>
-        <table class="list__table">
-            <tr class="list__row">
-                <th class="list__label">日付</th>
-                <th class="list__label">出勤</th>
-                <th class="list__label">退勤</th>
-                <th class="list__label">休憩</th>
-                <th class="list__label">合計</th>
-                <th class="list__label">詳細</th>
+        <table class="attendance__table">
+            <tr class="attendance__row">
+                <th class="attendance__label">日付</th>
+                <th class="attendance__label">出勤</th>
+                <th class="attendance__label">退勤</th>
+                <th class="attendance__label">休憩</th>
+                <th class="attendance__label">合計</th>
+                <th class="attendance__label">詳細</th>
             </tr>
 
             @foreach($dates as $date)
@@ -68,10 +68,10 @@
             $weekday = ['日','月','火','水','木','金','土'][$date->dayOfWeek];
             @endphp
             <tr>
-                <td>{{ $date->format('n') }}/{{ $date->format('d') }}（{{ $weekday }}）</td>
-                <td>{{ $attendance && $attendance->clock_in ? $attendance->clock_in->format('H:i') : '-' }}</td>
-                <td>{{ $attendance && $attendance->clock_out ? $attendance->clock_out->format('H:i') : '-' }}</td>
-                <td>
+                <td class="attendance__data">{{ $date->format('n') }}/{{ $date->format('d') }}（{{ $weekday }}）</td>
+                <td class="attendance__data">{{ $attendance && $attendance->clock_in ? $attendance->clock_in->format('H:i') : '-' }}</td>
+                <td class="attendance__data">{{ $attendance && $attendance->clock_out ? $attendance->clock_out->format('H:i') : '-' }}</td>
+                <td class="attendance__data">
                     @if($attendance)
                     @php
                     $h = intdiv($attendance->break_minutes_total, 60);
@@ -82,7 +82,7 @@
                     -
                     @endif
                 </td>
-                <td>
+                <td class="attendance__data">
                     @if($attendance)
                     @php
                     $h = intdiv($attendance->work_minutes_total, 60);
@@ -93,9 +93,9 @@
                     -
                     @endif
                 </td>
-                <td>
+                <td class="attendance__data detail__data">
                     @if($attendance)
-                    <a href="{{ route('admin.attendance.detail', $attendance->id) }}">詳細</a>
+                    <a href=" {{ route('admin.attendance.detail', $attendance->id) }}">詳細</a>
                     @else
                     -
                     @endif

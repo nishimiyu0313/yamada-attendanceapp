@@ -1,28 +1,30 @@
 body,
-.attendance-detail {
+.approve__content {
     background-color: #f0f0f0;
 }
 
-.attendance-detail {
+.approve__content {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 60px;
     justify-items: center;
 }
-.content__heading {
-    margin-left: 90px;
-}
 
-.attendance-inner {
+.approve-inner {
     margin: 70px 15px;
     width: 90%;
     position: relative;
 }
-.detail__content {
+
+.content__heading {
+    margin-left: 90px;
+}
+
+.approve-content {
     width: 100%;
 }
 
-.detail__table {
+.approve__table {
     width: 80%;
     border-collapse: collapse;
     margin: 0 auto;
@@ -30,28 +32,28 @@ body,
     border-radius: 10px;
 }
 
-.detail__table tr {
-    border-bottom: 3px solid #ddd; /* 行ごとに区切る */
+.approve__table tr {
+    border-bottom: 3px solid #f0f0f0; /* 行ごとに区切る */
 }
 
-.detail__table th,
-.detail__table td {
+.approve__table th,
+.approve__table td {
     padding: 30px;
     text-align: left;
     vertical-align: middle;
     border-radius: 10px;
 }
 
-.detail__table th {
+.approve__table th {
     width: 200px;
     background-color: #fff;
 }
 
-.detail__table td.editable {
+.approve__table td.editable {
     background-color: #fff;
 }
 
-.detail__table td.editable input {
+.approve__table td.editable-cell input {
     width: 100px;
     border: none;
     padding: 5px;
@@ -62,7 +64,7 @@ body,
     height: 35px;
 }
 
-.detail__table td.editable textarea {
+.approve__table td.editable-cell textarea {
     border: none;
     padding: 5px;
     box-sizing: border-box;
@@ -78,7 +80,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
 }
 
-.detail__table td.editable textarea {
+.approve__table td.editable-cell textarea {
     resize: vertical;
     min-height: 40px;
 }
@@ -98,13 +100,16 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     color: #555;
 }
 
-.detail-submit {
+.approve-submit {
     width: 130px;
     height: 50px;
     position: absolute;
     margin-top: 20px;
     right: 70px;
-    background-color: #020202;
+    background-color: #a8a7a7;
     color: #fff;
     font-size: 25px;
+    padding: 3px;
+    text-align: center;
+    border-radius: 5px;
 }

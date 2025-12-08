@@ -1,5 +1,4 @@
 .header {
-   
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -25,6 +24,7 @@
   margin: 0 auto;
   padding: 30px 15px;
   max-width: 1230px;
+  text-align: center;
 }
 
 .login-form__heading {
@@ -34,8 +34,7 @@
 
 .form {
   margin: 0 auto;
-  width: 70%;
-  text-align: center;
+  width: 50%;
 }
 
 .form__group {
@@ -44,7 +43,7 @@
 
 .form__group-title {
   text-align: left;
-margin-left: 80px;
+/*margin-left: 80px;*/
   font-weight: bold;
   font-size: 20px;
 }
@@ -63,7 +62,7 @@ margin-left: 80px;
 
 .form__input--text input {
   padding: 10px;
-  width: 680px;
+  width: 100%;
   height: 40px;
   border: 1px solid #0c0000;
   border-radius: 3px;
@@ -76,7 +75,7 @@ margin-left: 80px;
 
 .form__button-submit {
   padding: 10px;
-  width: 680px;
+  width: 100%;
   height: 50px;
   border: none;
   border-radius: 3px;
@@ -85,6 +84,7 @@ margin-left: 80px;
   cursor: pointer;
   font-size: 15px;
   font-weight: bold;
+  margin-top: 50px;
 }
 
 .register__link {

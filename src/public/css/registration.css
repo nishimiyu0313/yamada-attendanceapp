@@ -8,7 +8,20 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+.registration-form__content {
+    display: flex;
+    justify-content: center;   /* 横方向の中央 */
+    align-items: center;       /* 縦方向の中央 */
+    height: 100vh;             /* 画面全体の高さ */
+}
 
+
+.registration-inner {
+    display: flex;             /* ←これが必要 */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .status-display {
     font-size: 20px;
     font-weight: bold;
@@ -16,30 +29,43 @@
     color: #2c3e50;
     margin-bottom: 8px;
     text-align: center; 
-    margin-top: px;
     border-radius: 10px;
+    height: 40px;
+    width: 100px;
+
+    display: flex;            /* 横・縦中央寄せのため */
+    justify-content: center;  /* 水平方向の中央寄せ */
+    align-items: center;  
+
+    box-sizing: border-box;   
+
    
 
 }
-
+.attendance-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
 
 .date-display {
     font-size: 30px;
     display: flex;
     justify-content: center;
-    margin-top: 200px;
 }
 .time-display {
-    font-size: 50px;
+    font-size: 75px;
     font-weight: bold;
     display: flex;
+    text-align: center;
     justify-content: center;
+        margin-bottom: 40px;
 }
 .form-btn {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 30px; 
 }
 .registration-form__btn {
     padding: 10px 20px;
@@ -51,8 +77,10 @@
     cursor: pointer;
     font-weight: bold;
     padding: 10px;
-    width: 120px;
-    font-size: 15px;
+    width: 221px;
+    height: 77px;
+    font-size: 30px;
+    margin: 13px;
 }
 .attendance-footer {
     display: flex;

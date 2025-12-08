@@ -2,17 +2,17 @@ body {
     background-color:#eaeaeae5;
 } 
 
-.list-form__content {
+.attendance-form__content {
 max-width: 1200px;
 margin: 0 auto;
 padding: 0 60px;
 justify-items: center;
 
 }
-.list__heading content__heading {
+.content__heading content__heading {
     margin-left: 20px;
 }
-.list__inner {
+.attendance__inner {
     margin: 70px 15px;
     width: 80%;
    
@@ -22,7 +22,7 @@ a.month-btn{
     text-decoration: none;
 }
 
-.list__table {
+.attendance__table {
     margin-top: 16px;
     width: 100%;
     border-collapse: collapse;
@@ -32,25 +32,25 @@ a.month-btn{
     color: #727272;
 }
 
-.list__row {
+.attendance__row {
     border: 1px solid #e0dfde;
     color: #888;
 }
 
-.list__label,
-.list__data {
+.attendance__label,
+.attendance__data {
     padding: 16px 8px;
     text-align: center;
     vertical-align: middle;
 }
 
-.list__data {
+.attendance__data {
     padding: 16px 8px;
     text-align: center; 
     vertical-align: middle; 
 }
 
-.detail__data a{
+.attendance__data a{
     color: #000;
     font-weight: bold;     /* 太字 */
     text-decoration: none;
