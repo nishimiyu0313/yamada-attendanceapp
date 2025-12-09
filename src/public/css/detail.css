@@ -108,3 +108,17 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     color: #fff;
     font-size: 25px;
 }
+
+.alert-warning {
+    margin-top: 20px;
+    text-align: right;
+    margin-right: 80px;
+    color: #f70404;
+}
+
+.alert-danger {
+    margin-top: 20px;
+    text-align: right;
+    margin-right: 80px;
+    color: #f70404;
+}

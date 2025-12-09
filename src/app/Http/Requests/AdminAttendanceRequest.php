@@ -53,7 +53,7 @@ class AdminAttendanceRequest extends FormRequest
             $co = $clockOut ? Carbon::createFromFormat('H:i', $clockOut) : null;
 
             if ($ci && $co && $co->lt($ci)) {
-                $validator->errors()->add('clock_out', '退勤時間は出勤時間より後にしてください');
+                $validator->errors()->add('clock_out', '出勤時間が不適切です');
             }
 
             // 複数休憩チェック
@@ -63,13 +63,13 @@ class AdminAttendanceRequest extends FormRequest
                 $be = !empty($break['end']) ? Carbon::createFromFormat('H:i', $break['end']) : null;
 
                 if ($bs && $be && $be->lt($bs)) {
-                    $validator->errors()->add("breaks.$index.end", '休憩終了時間は開始時間より後にしてください');
+                    $validator->errors()->add("breaks.$index.end", '休憩時間が不適切な値です');
                 }
-                if ($ci && $bs && $bs->lt($ci)) {
-                    $validator->errors()->add("breaks.$index.start", '休憩開始時間は出勤時間より後にしてください');
+                if ($bs && $co && $bs->lt($co)) {
+                    $validator->errors()->add("breaks.$index.start", '休憩時間が不適切な値です');
                 }
                 if ($be && $co && $be->gt($co)) {
-                    $validator->errors()->add("breaks.$index.end", '休憩終了時間は退勤時間より前にしてください');
+                    $validator->errors()->add("breaks.$index.end", '休憩時間もしくは退勤時間が不適切な値です');
                 }
             }
         });

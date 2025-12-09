@@ -57,7 +57,7 @@
 }
 
 .text-danger {
-    margin-left: 80px;
+    text-align: left;
 }
 
 .form__input--text input {

@@ -125,7 +125,7 @@ public function create(Request $request)
         return view('user.detail', [
             'attendance' => $attendance,
             'isEditable' => $attendance->can_edit, // 修正可能かどうか
-            'message' => $attendance->can_edit ? null : '修正待ちのため修正できません。', // 修正不可ならメッセージ
+            'message' => $attendance->can_edit ? null : '*修正待ちのため修正できません。', // 修正不可ならメッセージ
         ]);
     }
 
@@ -159,7 +159,7 @@ public function create(Request $request)
         return view('user.detail', [
             'attendance' => $attendance,
             'isEditable' => $attendance->can_edit,
-            'message' => $attendance->can_edit ? null : '承認待ちのため修正できません。',
+            'message' => $attendance->can_edit ? null : '*承認待ちのため修正できません。',
         ]);
     }
 

@@ -55,9 +55,6 @@ class AttendanceController extends Controller
     }
 
 
-
-
-
     public function show($id)
     {
         $attendance = Attendance::with(['user', 'breaks', 'requests'])->findOrFail($id);
@@ -67,13 +64,17 @@ class AttendanceController extends Controller
             ->where('status', 'applied')
             ->exists();
 
-        // 修正可能かどうかのフラグ
-        $isEditable = !$hasPendingRequest;
+        // 管理者用：承認待ちがあれば編集不可
+        if (auth()->user()->is_admin) {
+            $isEditable = true;
+        } else {
+            // 一般ユーザーは承認待ちがあれば編集不可
+            $isEditable = !$hasPendingRequest;
+        }
 
-        // 管理者用メッセージ
-        $message = $isEditable
-            ? null
-            : 'この勤怠には承認待ちの申請があるため修正できません。';
+        $message = $hasPendingRequest
+            ? 'この勤怠には承認待ちの申請があるため修正できません。'
+            : null;
 
         return view('admin.detail', [
             'attendance' => $attendance,
@@ -84,39 +85,48 @@ class AttendanceController extends Controller
 
     public function request(AdminAttendanceRequest $request, $id)
     {
-        $attendance = Attendance::with('breaks')->findOrFail($id);
-        $workDate = Carbon::parse($attendance->work_date)->format('Y-m-d');
+        $attendance = Attendance::with('breaks', 'requests')->findOrFail($id);
 
-        $attendance->clock_in  = $request->clock_in
-            ? Carbon::parse("$workDate {$request->clock_in}")
-            : null;
+        // 承認待ち申請があれば更新不可
+        $hasPendingRequest = $attendance->requests()->where('status', 'applied')->exists();
+        if ($hasPendingRequest) {
+            return back()->with('error', '承認待ちの申請があるため修正できません。');
+        }
 
-        $attendance->clock_out = $request->clock_out
-            ? Carbon::parse("$workDate {$request->clock_out}")
-            : null;
+        $workDate = $attendance->work_date->format('Y-m-d');
 
+        // 勤怠更新
+        $attendance->clock_in  = $request->clock_in ? Carbon::parse("$workDate {$request->clock_in}") : null;
+        $attendance->clock_out = $request->clock_out ? Carbon::parse("$workDate {$request->clock_out}") : null;
         $attendance->save();
 
-        // 休憩申請作成
+        // 休憩更新
         if ($attendance->breaks->count() > 0 && $request->has('breaks')) {
             foreach ($attendance->breaks as $index => $break) {
                 if (isset($request->breaks[$index]['start'], $request->breaks[$index]['end'])) {
-
                     $break->break_start = Carbon::parse("$workDate {$request->breaks[$index]['start']}");
                     $break->break_end   = Carbon::parse("$workDate {$request->breaks[$index]['end']}");
-
                     $break->save();
                 }
             }
         }
 
-        return redirect()
-            ->route('admin.requests', ['status' => 'approved'])
-            ->with('success', '勤怠を修正しました。');
+        // 画面にそのままメッセージ表示
+        $message = '勤怠を修正しました。';
+
+        return view('admin.detail', [
+            'attendance' => $attendance,
+            'isEditable' => true,
+            'message'    => $message,
+        ]);
     }
 
 
-        /*$requestedClockIn = Carbon::parse("$workDate {$request->clock_in}");
+
+
+
+
+    /*$requestedClockIn = Carbon::parse("$workDate {$request->clock_in}");
         $requestedClockOut = $request->clock_out
             ? Carbon::parse("$workDate {$request->clock_out}")
             : null;

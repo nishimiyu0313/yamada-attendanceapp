@@ -25,7 +25,7 @@ class RequestController extends Controller
         // 取得したIDで本体を取得
         $requests = AttendanceRequest::with('attendance.user')
             ->whereIn('id', $subQuery)
-            ->orderBy('applied_date', 'asc')
+            ->orderBy('applied_date', 'desc')
             ->paginate(15);
 
         /*$requests = AttendanceRequest::with('attendance.user')

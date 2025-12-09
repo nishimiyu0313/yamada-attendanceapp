@@ -8,6 +8,7 @@
 <div class="attendance-detail">
     <div class="attendance-inner">
         <h2 class="detail__heading content__heading">勤怠詳細</h2>
+
         <form action="{{ route('attendance.store', ['id' => $attendance->id]) }}" method="POST" novalidate>
             @csrf
             <div class="detail__content">
@@ -73,35 +74,35 @@
                     </tr>
                     @endforeach
 
-                    @for($i = $breakCount; $i < 2; $i++)
-                        <tr>
-                        <th>休憩{{ $i + 1 }}</th>
+
+                    <tr>
+                        <th>休憩{{ $breakCount + 1 }}</th>
                         <td class="editable">
                             <div class="time-range">
-                                <input type="time" name="breaks[{{ $i }}][start]" value="" disabled>
+                                <input type="time" name="breaks[{{ $breakCount }}][start]" value="" @unless($isEditable) disabled @endunless>
 
                                 <span>～</span>
 
-                                <input type="time" name="breaks[{{ $i }}][end]" value="" disabled>
+                                <input type="time" name="breaks[{{ $breakCount }}][end]" value="" @unless($isEditable) disabled @endunless>
                             </div>
                         </td>
-                        </tr>
-                        @endfor
+                    </tr>
 
-                        <tr>
-                            <th>備考</th>
-                            <td class="editable">
-                                <textarea name="reason" @unless($isEditable) disabled @endunless>{{ $attendance->reason }}</textarea>
-                                <div class="register-form__error-message">
-                                    {{ $errors->first('reason') }}
-                                </div>
-                            </td>
-                        </tr>
+
+                    <tr>
+                        <th>備考</th>
+                        <td class="editable">
+                            <textarea name="reason" @unless($isEditable) disabled @endunless>{{ $attendance->reason }}</textarea>
+                            <div class="register-form__error-message">
+                                {{ $errors->first('reason') }}
+                            </div>
+                        </td>
+                    </tr>
                 </table>
             </div>
 
             @if (session('error'))
-            <div class="alert alert-danger">
+            <div class="alert-danger">
                 {{ session('error') }}
             </div>
             @endif
@@ -110,8 +111,9 @@
             <button type="submit" class="detail-submit">修正</button>
             @endif
             @if($message)
-            <div class="alert alert-warning">{{ $message }}</div>
+            <div class="alert-warning">{{ $message }}</div>
             @endif
+
         </form>
 
     </div>
