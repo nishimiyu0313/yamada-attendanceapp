@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateAttendanceRequest;
+use App\Http\Requests\UserRequest;
+use App\Http\Requests\AdminAttendanceRequest;
 use App\Models\Attendance;
 use App\Models\User;
 use App\Models\RequestBreak;
@@ -79,18 +80,15 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function request(Request $request, $id)
+    public function request(AdminAttendanceRequest $request, $id)
     {
         $attendance = Attendance::with('breaks')->findOrFail($id);
-
         $workDate = Carbon::parse($attendance->work_date)->format('Y-m-d');
         $today = Carbon::today()->format('Y-m-d');
 
         if ($workDate === $today) {
             return redirect()->back()->with('error', '当日の勤怠は修正申請できません。');
         }
-        
-        
         
         $hasPendingRequest = AttendanceRequest::whereHas('attendance', function ($q) use ($workDate) {
             $q->where('work_date', $workDate);

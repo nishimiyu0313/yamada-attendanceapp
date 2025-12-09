@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserAttendanceRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use App\Models\RequestBreak;
@@ -13,7 +14,7 @@ use Carbon\Carbon;
 class RequestController extends Controller
 {
        
-       public function store(Request $request, $id)
+       public function store(UserAttendanceRequest $request, $id)
 {
     $attendance = Attendance::findOrFail($id);
 

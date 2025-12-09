@@ -57,9 +57,9 @@
 
                 <div class="approve__footer">
                     @if($attendanceRequest->status === 'applied')
-                    <button type="approve-submit" class="btn btn-primary">承認</button>
+                    <button type="submit" class="approve-submit">承認</button>
                     @else
-                    <span class="approve-submit">承認済み</span>
+                    <span class="approved-submit">承認済み</span>
                     @endif
                 </div>
             </div>

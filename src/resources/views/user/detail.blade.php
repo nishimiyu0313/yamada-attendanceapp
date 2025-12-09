@@ -8,7 +8,7 @@
 <div class="attendance-detail">
     <div class="attendance-inner">
         <h2 class="detail__heading content__heading">勤怠詳細</h2>
-        <form action="{{ route('attendance.store', ['id' => $attendance->id]) }}" method="POST">
+        <form action="{{ route('attendance.store', ['id' => $attendance->id]) }}" method="POST" novalidate>
             @csrf
             <div class="detail__content">
                 <table class="detail__table">
@@ -37,6 +37,10 @@
                                 <input type="time" name="clock_out"
                                     value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}"
                                     @unless($isEditable) disabled @endunless>
+                                <div class="register-form__error-message">
+                                    {{ $errors->first('clock_in') }}
+                                    {{ $errors->first('clock_out') }}
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -60,6 +64,10 @@
                                 <input type="time" name="breaks[{{ $index }}][end]"
                                     value="{{ old("breaks.$index.end", $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '') }}"
                                     @unless($isEditable) disabled @endunless>
+                                <div class="register-form__error-message">
+                                    {{ $errors->first('breaks.*.start') }}
+                                    {{ $errors->first('breaks.*.end') }}
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -84,6 +92,9 @@
                             <th>備考</th>
                             <td class="editable">
                                 <textarea name="reason" @unless($isEditable) disabled @endunless>{{ $attendance->reason }}</textarea>
+                                <div class="register-form__error-message">
+                                    {{ $errors->first('reason') }}
+                                </div>
                             </td>
                         </tr>
                 </table>
@@ -94,7 +105,7 @@
                 {{ session('error') }}
             </div>
             @endif
-            
+
             @if($isEditable)
             <button type="submit" class="detail-submit">修正</button>
             @endif
