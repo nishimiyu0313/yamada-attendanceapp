@@ -60,23 +60,25 @@ class AttendanceController extends Controller
 
     public function show($id)
     {
-        $attendance = Attendance::with(['user', 'breaks'])->findOrFail($id);
+        $attendance = Attendance::with(['user', 'breaks', 'requests'])->findOrFail($id);
 
         // 承認待ちの申請があるかどうか
-        $hasPendingRequest = AttendanceRequest::whereHas('attendance', function ($q) use ($attendance) {
-            $q->where('work_date', $attendance->work_date);
-        })->where('status', 'applied')->exists();
+        $hasPendingRequest = $attendance->requests()
+            ->where('status', 'applied')
+            ->exists();
 
         // 修正可能かどうかのフラグ
         $isEditable = !$hasPendingRequest;
 
         // 管理者用メッセージ
-        $message = $isEditable ? null : 'この勤怠は承認待ちの申請があるため修正できません。';
+        $message = $isEditable
+            ? null
+            : 'この勤怠には承認待ちの申請があるため修正できません。';
 
         return view('admin.detail', [
             'attendance' => $attendance,
             'isEditable' => $isEditable,
-            'message' => $message,
+            'message'    => $message,
         ]);
     }
 
@@ -84,46 +86,33 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::with('breaks')->findOrFail($id);
         $workDate = Carbon::parse($attendance->work_date)->format('Y-m-d');
-        $today = Carbon::today()->format('Y-m-d');
 
-        if ($workDate === $today) {
-            return redirect()->back()->with('error', '当日の勤怠は修正申請できません。');
-        }
-        
-        $hasPendingRequest = AttendanceRequest::whereHas('attendance', function ($q) use ($workDate) {
-            $q->where('work_date', $workDate);
-        })->where('status', 'applied')->exists();
+        $attendance->clock_in  = $request->clock_in
+            ? Carbon::parse("$workDate {$request->clock_in}")
+            : null;
 
-        if ($hasPendingRequest) {
-            return redirect()->back()->with('error', 'この日の勤怠には承認待ちの申請があるため修正できません。');
-        }
+        $attendance->clock_out = $request->clock_out
+            ? Carbon::parse("$workDate {$request->clock_out}")
+            : null;
 
-        $attendanceRequest = AttendanceRequest::create([
-            'attendance_id'        => $attendance->id,
-            'requested_clock_in'   => Carbon::parse("$workDate {$request->clock_in}"),
-            'requested_clock_out'  => $request->clock_out ? Carbon::parse("$workDate {$request->clock_out}") : null,
-            'reason'               => $request->reason ?? '勤怠修正申請',
-            'applied_date'         => now()->toDateString(),
-            'status'               => 'applied',
-        ]);
+        $attendance->save();
 
         // 休憩申請作成
         if ($attendance->breaks->count() > 0 && $request->has('breaks')) {
             foreach ($attendance->breaks as $index => $break) {
                 if (isset($request->breaks[$index]['start'], $request->breaks[$index]['end'])) {
-                    RequestBreak::create([
-                        'request_id'            => $attendanceRequest->id,
-                        'break_id'              => $break->id,
-                        'requested_break_start' => Carbon::parse("$workDate {$request->breaks[$index]['start']}"),
-                        'requested_break_end'   => Carbon::parse("$workDate {$request->breaks[$index]['end']}"),
-                    ]);
+
+                    $break->break_start = Carbon::parse("$workDate {$request->breaks[$index]['start']}");
+                    $break->break_end   = Carbon::parse("$workDate {$request->breaks[$index]['end']}");
+
+                    $break->save();
                 }
             }
         }
 
         return redirect()
-            ->route('admin.requests', ['status' => 'pending'])
-            ->with('success', '修正申請を承認待ちに追加しました。');
+            ->route('admin.requests', ['status' => 'approved'])
+            ->with('success', '勤怠を修正しました。');
     }
 
 
