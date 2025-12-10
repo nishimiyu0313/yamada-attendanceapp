@@ -101,3 +101,20 @@ a.month-btn{
     color: #888;
     font-size: 18px;
 }
+
+.csv-area {
+    display: flex;
+    justify-content: flex-end; /* テーブルの右端に揃える */
+    margin-top: 30px;
+}
+
+.csv-submit {
+    width: 130px;
+    height: 50px;
+    background-color: #020202;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

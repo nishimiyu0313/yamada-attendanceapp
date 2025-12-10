@@ -8,6 +8,8 @@ use App\Http\Requests\UserRequest;
 use App\Http\Requests\AdminAttendanceRequest;
 use App\Models\Attendance;
 use App\Models\User;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Date;
 use App\Models\RequestBreak;
 use App\Models\Request as AttendanceRequest;
 
@@ -52,6 +54,81 @@ class AttendanceController extends Controller
             ->keyBy(fn($item) => $item->work_date->format('Y-m-d'));
 
         return view('admin.attendance', compact('staff', 'dates', 'attendances', 'currentDate', 'prevDate', 'nextDate'));
+    }
+
+
+    public function csv(Request $request)
+    {
+
+        $month = $request->month; // ← ここで月を受け取る
+
+        $query = Attendance::with('breaks')
+            ->where('user_id', auth()->id()); // ← 当該ユーザー
+
+        if ($month) {
+            $year = substr($month, 0, 4);
+            $monthNum = substr($month, 5, 2);
+
+            $query->whereYear('work_date', $year)
+                ->whereMonth('work_date', $monthNum);
+        }
+
+        $attendances = $query->get();
+
+
+        $csvHeader = [
+            'id',
+            'work_date',
+            'clock_in',
+            'clock_out',
+            'breaktime',
+            'worktime',
+            'created_at',
+            'updated_at'
+        ];
+
+        $response = new StreamedResponse(function () use ($csvHeader, $attendances) {
+            $file = fopen('php://output', 'w');
+
+            mb_convert_variables('SJIS-win', 'UTF-8', $csvHeader);
+
+            fputcsv($file, $csvHeader);
+
+            foreach ($attendances as $attendance) {
+                $breakMinutes = $attendance->break_minutes_total;
+                $workMinutes  = $attendance->work_minutes_total;
+
+                // 分 → 時:分 形式に変換
+                $breakH = intdiv($breakMinutes, 60);
+                $breakM = $breakMinutes % 60;
+                $breakTime = "{$breakH}:" . str_pad($breakM, 2, '0', STR_PAD_LEFT);
+
+                $workH = intdiv($workMinutes, 60);
+                $workM = $workMinutes % 60;
+                $workTime = "{$workH}:" . str_pad($workM, 2, '0', STR_PAD_LEFT);
+
+                // CSV行にまとめる
+                $row = [
+                    $attendance->id,
+                    $attendance->work_date,
+                    $attendance->clock_in?->format('H:i') ?? '',
+                    $attendance->clock_out?->format('H:i') ?? '',
+                    $breakTime,
+                    $workTime,
+                    Carbon::parse($attendance->created_at)->setTimezone('Asia/Tokyo')->format('Y/m/d H:i:s'),
+                    Carbon::parse($attendance->updated_at)->setTimezone('Asia/Tokyo')->format('Y/m/d H:i:s'),
+                ];
+
+                fputcsv($file, $row);
+            }
+
+            fclose($file);
+        }, 200, [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="attendance.csv"',
+        ]);
+
+        return $response;
     }
 
 
@@ -120,92 +197,4 @@ class AttendanceController extends Controller
             'message'    => $message,
         ]);
     }
-
-
-
-
-
-
-    /*$requestedClockIn = Carbon::parse("$workDate {$request->clock_in}");
-        $requestedClockOut = $request->clock_out
-            ? Carbon::parse("$workDate {$request->clock_out}")
-            : null;
-
-        $attendanceRequest =AttendanceRequest::create([
-            'attendance_id'        => $attendance->id,
-            'requested_clock_in'   => $requestedClockIn,
-            'requested_clock_out'  => $requestedClockOut,
-            'reason'               => $request->note ?? '勤怠修正申請',
-            'applied_date'         => now()->toDateString(),
-            'status'               => 'applied',
-        ]);
-
-        // Break 1
-        if ($request->break1_start && $request->break1_end) {
-            $break1 = $attendance->breaks()->skip(0)->first();
-
-            if ($break1) {
-                RequestBreak::create([
-                    'request_id' => $attendanceRequest->id,
-                    'break_id'              => $break1->id,
-                    'requested_break_start' => Carbon::parse("$workDate {$request->break1_start}"),
-                    'requested_break_end'   => Carbon::parse("$workDate {$request->break1_end}"),
-                ]);
-            }
-        }
-
-        // Break 2
-        if ($request->break2_start && $request->break2_end) {
-            $break2 = $attendance->breaks()->skip(1)->first();
-
-            if ($break2) {
-                RequestBreak::create([
-                    'request_id' => $attendanceRequest->id,
-                    'break_id'              => $break2->id,
-                    'requested_break_start' => Carbon::parse("$workDate {$request->break2_start}"),
-                    'requested_break_end'   => Carbon::parse("$workDate {$request->break2_end}"),
-                ]);
-            }
-        }
-
-        return redirect()
-            ->route('admin.requests', ['status' => 'pending'])
-            ->with('success', '修正申請を承認待ちに追加しました。');
-    }*/
-
-
-
-    /*public function update($request, $id)
-    {
-        $attendance = Attendance::with('breaks')->findOrFail($id);
-
-        // 出退勤更新
-        $attendance->clock_in = $request->clock_in ? "{$attendance->work_date} {$request->clock_in}" : null;
-        $attendance->clock_out = $request->clock_out ? "{$attendance->work_date} {$request->clock_out}" : null;
-        $attendance->note = $request->note;
-        $attendance->save();
-
-        // 休憩更新
-        $breakData = [
-            ['start' => $request->break1_start, 'end' => $request->break1_end],
-            ['start' => $request->break2_start, 'end' => $request->break2_end],
-        ];
-
-        foreach ($breakData as $index => $data) {
-            if (isset($attendance->breaks[$index])) {
-                $attendance->breaks[$index]->update([
-                    'break_start' => $data['start'] ? "{$attendance->work_date} {$data['start']}" : null,
-                    'break_end' => $data['end'] ? "{$attendance->work_date} {$data['end']}" : null,
-                ]);
-            } elseif ($data['start']) {
-                $attendance->breaks()->create([
-                    'break_start' => "{$attendance->work_date} {$data['start']}",
-                    'break_end' => $data['end'] ? "{$attendance->work_date} {$data['end']}" : null,
-                ]);
-            }
-        }
-
-        return redirect()
-            ->route('admin.attendance.detail', $attendance->id)
-            ->with('success', '勤怠情報を更新しました。');*/
 }

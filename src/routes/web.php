@@ -59,6 +59,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/admin/attendance/{id}', [AdminAttendanceController::class, 'request'])->name('admin.attendance.request');
     Route::get('/admin/staff/list', [AdminUserController::class, 'index']);
     Route::get('/admin/attendance/staff/{id}', [AdminAttendanceController::class, 'staffindex'])->name('admin.attendance.staff');
+    Route::get('/csv', [AdminAttendanceController::class, 'csv']);
     Route::get('/stamp_correction_request/list', [AdminRequestController::class, 'index'])->name('admin.requests');
     Route::get('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminRequestController::class, 'show'])->name('admin.stamp_request.approve');
     Route::PATCH('/stamp_correction_request/approve/{attendance_correct_request_id}', [AdminRequestController::class, 'update'])->name('admin.stamp_request.update');
