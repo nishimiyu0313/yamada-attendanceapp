@@ -97,5 +97,10 @@ class FortifyServiceProvider extends ServiceProvider
             \Laravel\Fortify\Http\Requests\LoginRequest::class,
             \App\Http\Requests\LoginRequest::class
         );
+
+        
+        Fortify::verifyEmailView(function () {
+            return view('auth.verify-email');
+        });
     }
 }

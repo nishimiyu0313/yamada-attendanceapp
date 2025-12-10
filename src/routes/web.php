@@ -30,7 +30,7 @@ Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])
 
 
 // 認証必須グループ
-Route::middleware('auth', 'user')->group(function () {
+Route::middleware('auth', 'verified')->group(function () {
 
     // ======================
     // 一般ユーザー側
