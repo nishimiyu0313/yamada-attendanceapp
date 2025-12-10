@@ -37,8 +37,8 @@
                     @foreach ($attendances as $attendance)
                     <tr class="index__row">
                         <td class="index__data">{{ $attendance->user->name }}</td>
-                        <td class="index__data">{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '-' }}</td>
-                        <td class="index__data">{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '-' }}</td>
+                        <td class="index__data">{{ $attendance->clock_in ? \Carbon\Carbon::parse($attendance->clock_in)->format('H:i') : '' }}</td>
+                        <td class="index__data">{{ $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '' }}</td>
                         <td class="index__data">{{ formatMinutes($attendance->break_minutes_total) }}</td>
                         <td class="index__data">{{ formatMinutes($attendance->work_minutes_total)  }}</td>
                         <td class="index__data detail__data">

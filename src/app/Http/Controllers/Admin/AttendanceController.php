@@ -73,7 +73,7 @@ class AttendanceController extends Controller
         }
 
         $message = $hasPendingRequest
-            ? 'この勤怠には承認待ちの申請があるため修正できません。'
+            ? '*承認待ちのため修正できません。'
             : null;
 
         return view('admin.detail', [
@@ -90,7 +90,7 @@ class AttendanceController extends Controller
         // 承認待ち申請があれば更新不可
         $hasPendingRequest = $attendance->requests()->where('status', 'applied')->exists();
         if ($hasPendingRequest) {
-            return back()->with('error', '承認待ちの申請があるため修正できません。');
+            return back()->with('error', '*承認待ちのため修正できません。');
         }
 
         $workDate = $attendance->work_date->format('Y-m-d');

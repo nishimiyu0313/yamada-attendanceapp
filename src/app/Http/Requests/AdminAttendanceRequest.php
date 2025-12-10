@@ -15,32 +15,24 @@ class AdminAttendanceRequest extends FormRequest
     public function rules()
     {
         return [
-            'clock_in' => ['required', 'date_format:H:i'],
-            'clock_out' => ['required', 'date_format:H:i'],
+            'clock_in' => ['nullable'],
+            'clock_out' => ['nullable'],
             'reason' => ['required'],
 
-            // 休憩は必ず入れる（修正画面では元データ分だけ存在する前提）
-            'breaks' => ['required', 'array'],
-            'breaks.*.start' => ['required', 'date_format:H:i'],
-            'breaks.*.end' => ['required', 'date_format:H:i'],
+            'breaks' => ['array'],
+            'breaks.*.start' => ['nullable'],
+            'breaks.*.end' => ['nullable'],
         ];
     }
 
     public function messages()
     {
         return [
-            'clock_in.required' => '出勤時間を入力してください',
-            'clock_in.date_format' => '出勤時間の形式が正しくありません',
-            'clock_out.required' => '退勤時間を入力してください',
-            'clock_out.date_format' => '退勤時間の形式が正しくありません',
             'reason.required' => '備考を入力してください',
-            'breaks.required' => '休憩情報が不足しています',
-            'breaks.*.start.required' => '休憩開始時間を入力してください',
-            'breaks.*.start.date_format' => '休憩開始時間の形式が正しくありません',
-            'breaks.*.end.required' => '休憩終了時間を入力してください',
-            'breaks.*.end.date_format' => '休憩終了時間の形式が正しくありません',
         ];
     }
+
+
 
     public function withValidator($validator)
     {
@@ -58,18 +50,27 @@ class AdminAttendanceRequest extends FormRequest
 
             // 複数休憩チェック
             $breaks = $this->input('breaks', []);
+
+
             foreach ($breaks as $index => $break) {
                 $bs = !empty($break['start']) ? Carbon::createFromFormat('H:i', $break['start']) : null;
                 $be = !empty($break['end']) ? Carbon::createFromFormat('H:i', $break['end']) : null;
 
+                if ($bs && $ci && $bs->lt($ci)) {
+                    $validator->errors()->add("breaks.$index.start", '休憩時間が不適切な値です');
+                    continue;
+                }
+
+                // (2) 休憩終了が休憩開始より前 → NG
                 if ($bs && $be && $be->lt($bs)) {
                     $validator->errors()->add("breaks.$index.end", '休憩時間が不適切な値です');
+                    continue;
                 }
-                if ($bs && $co && $bs->lt($co)) {
-                    $validator->errors()->add("breaks.$index.start", '休憩時間が不適切な値です');
-                }
+
+                // (3) 休憩終了が退勤より後 → NG
                 if ($be && $co && $be->gt($co)) {
                     $validator->errors()->add("breaks.$index.end", '休憩時間もしくは退勤時間が不適切な値です');
+                    continue;
                 }
             }
         });

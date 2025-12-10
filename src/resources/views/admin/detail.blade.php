@@ -105,7 +105,7 @@
                 </table>
 
                 @if (session('error'))
-                <div class="alert alert-danger">
+                <div class="alert-danger">
                     {{ session('error') }}
                 </div>
                 @endif
@@ -115,7 +115,7 @@
                     <button type="submit" class="detail-submit">修正</button>
                     @endif
                     @if($message)
-                    <div class="alert alert-warning">{{ $message }}</div>
+                    <div class="alert-warning">{{ $message }}</div>
                     @endif
                 </div>
             </div>

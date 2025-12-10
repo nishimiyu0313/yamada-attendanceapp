@@ -69,8 +69,8 @@
             @endphp
             <tr>
                 <td class="attendance__data">{{ $date->format('n') }}/{{ $date->format('d') }}（{{ $weekday }}）</td>
-                <td class="attendance__data">{{ $attendance && $attendance->clock_in ? $attendance->clock_in->format('H:i') : '-' }}</td>
-                <td class="attendance__data">{{ $attendance && $attendance->clock_out ? $attendance->clock_out->format('H:i') : '-' }}</td>
+                <td class="attendance__data">{{ $attendance && $attendance->clock_in ? $attendance->clock_in->format('H:i') : '' }}</td>
+                <td class="attendance__data">{{ $attendance && $attendance->clock_out ? $attendance->clock_out->format('H:i') : '' }}</td>
                 <td class="attendance__data">
                     @if($attendance)
                     @php
@@ -79,7 +79,7 @@
                     @endphp
                     {{ $h }}:{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}
                     @else
-                    -
+                    
                     @endif
                 </td>
                 <td class="attendance__data">
@@ -90,14 +90,14 @@
                     @endphp
                     {{ $h }}:{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}
                     @else
-                    -
+                    
                     @endif
                 </td>
                 <td class="attendance__data detail__data">
                     @if($attendance)
                     <a href=" {{ route('admin.attendance.detail', $attendance->id) }}">詳細</a>
                     @else
-                    -
+                    
                     @endif
                 </td>
             </tr>
