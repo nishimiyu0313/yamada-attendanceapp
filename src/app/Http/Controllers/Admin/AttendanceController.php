@@ -25,6 +25,9 @@ class AttendanceController extends Controller
 
         $attendances = Attendance::with('user', 'breaks')
             ->where('work_date', $currentDate)
+            ->whereHas('user', function ($query) {
+                $query->where('role', 'user'); // 管理者(admin)は除外
+            })
             ->get();
 
         return view('admin.index', compact('currentDate', 'prevDate', 'nextDate', 'attendances'));
@@ -34,6 +37,9 @@ class AttendanceController extends Controller
     public function staffindex(Request $request, $id)
     {
         $staff = User::findOrFail($id);
+        //dd($staff);
+
+
         $currentDate = $request->query('work_date') ? Carbon::parse($request->query('work_date')) : Carbon::today();
         $prevDate = $currentDate->copy()->subMonth()->format('Y-m-d');
         $nextDate = $currentDate->copy()->addMonth()->format('Y-m-d');
@@ -46,12 +52,17 @@ class AttendanceController extends Controller
             $dates[] = $date->copy();
         }
 
-        $attendances = Attendance::where('user_id', $staff->id)
+        $attendances = Attendance::with('breaks')
+            ->where('user_id', $staff->id)
             ->whereMonth('work_date', $currentDate->month)
+            //->whereBetween('work_date', [$startOfMonth, $endOfMonth])
             ->whereYear('work_date', $currentDate->year)
             ->orderBy('work_date', 'asc')
             ->get()
             ->keyBy(fn($item) => $item->work_date->format('Y-m-d'));
+            //->keyBy('work_date');
+
+
 
         return view('admin.attendance', compact('staff', 'dates', 'attendances', 'currentDate', 'prevDate', 'nextDate'));
     }
