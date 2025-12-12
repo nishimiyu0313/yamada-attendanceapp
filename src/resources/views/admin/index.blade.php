@@ -26,13 +26,7 @@
                         <th class="index__label detail__label">詳細</th>
                     </tr>
 
-                    @php
-                    function formatMinutes($minutes) {
-                    $h = floor($minutes / 60);
-                    $m = $minutes % 60;
-                    return sprintf('%d:%02d', $h, $m);
-                    }
-                    @endphp
+
 
                     @foreach ($attendances as $attendance)
                     <tr class="index__row">

@@ -50,7 +50,7 @@ class Attendance extends Model
         return match ($this->status) {
             self::STATUS_WORKING  => '勤務中',
             self::STATUS_BREAKING => '休憩中',
-            self::STATUS_FINISHED => '退勤済み',
+            self::STATUS_FINISHED => '退勤済',
             default => '不明',
         };
     }
