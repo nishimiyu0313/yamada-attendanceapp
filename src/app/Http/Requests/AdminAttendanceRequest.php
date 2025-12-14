@@ -45,7 +45,7 @@ class AdminAttendanceRequest extends FormRequest
             $co = $clockOut ? Carbon::createFromFormat('H:i', $clockOut) : null;
 
             if ($ci && $co && $co->lt($ci)) {
-                $validator->errors()->add('clock_out', '出勤時間が不適切です');
+                $validator->errors()->add('clock_out', '出勤時間が不適切な値です');
             }
 
             // 複数休憩チェック
@@ -56,7 +56,7 @@ class AdminAttendanceRequest extends FormRequest
                 $bs = !empty($break['start']) ? Carbon::createFromFormat('H:i', $break['start']) : null;
                 $be = !empty($break['end']) ? Carbon::createFromFormat('H:i', $break['end']) : null;
 
-                if ($bs && $ci && $bs->lt($ci)) {
+                if ($bs && $co && $bs->gt($co)) {
                     $validator->errors()->add("breaks.$index.start", '休憩時間が不適切な値です');
                     continue;
                 }

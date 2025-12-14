@@ -33,7 +33,7 @@ class AttendanceController extends Controller
         return view('admin.index', compact('currentDate', 'prevDate', 'nextDate', 'attendances'));
     }
 
-    
+
     public function staffindex(Request $request, $id)
     {
         $staff = User::findOrFail($id);
@@ -60,7 +60,7 @@ class AttendanceController extends Controller
             ->orderBy('work_date', 'asc')
             ->get()
             ->keyBy(fn($item) => $item->work_date->format('Y-m-d'));
-            //->keyBy('work_date');
+        //->keyBy('work_date');
 
 
 
@@ -189,23 +189,33 @@ class AttendanceController extends Controller
         $attendance->save();
 
         // 休憩更新
-        if ($attendance->breaks->count() > 0 && $request->has('breaks')) {
-            foreach ($attendance->breaks as $index => $break) {
-                if (isset($request->breaks[$index]['start'], $request->breaks[$index]['end'])) {
-                    $break->break_start = Carbon::parse("$workDate {$request->breaks[$index]['start']}");
-                    $break->break_end   = Carbon::parse("$workDate {$request->breaks[$index]['end']}");
-                    $break->save();
+        //if ($attendance->breaks->count() > 0 && $request->has('breaks')) {
+        //foreach ($attendance->breaks as $index => $break) {
+        //  if (isset($request->breaks[$index]['start'], $request->breaks[$index]['end'])) {
+        //    $break->break_start = Carbon::parse("$workDate {$request->breaks[$index]['start']}");
+        //  $break->break_end   = Carbon::parse("$workDate {$request->breaks[$index]['end']}");
+        //$break->save();
+        // }
+        //}
+        if ($request->has('breaks')) {
+            foreach ($request->breaks as $index => $breakData) {
+                $break = $attendance->breaks[$index] ?? $attendance->breaks()->create([]);
+                if (!empty($breakData['start'])) {
+                    $break->break_start = Carbon::parse("$workDate {$breakData['start']}");
                 }
+                if (!empty($breakData['end'])) {
+                    $break->break_end = Carbon::parse("$workDate {$breakData['end']}");
+                }
+                $break->save();
             }
         }
 
-        // 画面にそのままメッセージ表示
-        $message = '勤怠を修正しました。';
+        return redirect()->back()->with('message', '勤怠を修正しました。');
 
-        return view('admin.detail', [
-            'attendance' => $attendance,
-            'isEditable' => true,
-            'message'    => $message,
-        ]);
-    }
+    // 画面にそのままメッセージ表示
+   // $message = '勤怠を修正しました。';
+
+    //return view('admin.detail', ['attendance' => $attendance, 'isEditable' => true, 'message'    => $message,
+    //]);
+}
 }

@@ -47,6 +47,25 @@ class ClockoutTest extends TestCase
 
     public function test_退勤時刻が勤怠一覧画面で確認できる() 
     {
-        
+        $user = User::factory()->create();
+
+        // 2. 勤怠データ作成
+        $attendance = Attendance::create([
+            'user_id'   => $user->id,
+            'work_date' => Carbon::today(),
+            'clock_in'  => Carbon::parse('09:00:00'),
+            'clock_out'  => Carbon::parse('18:00:00'),
+            'status'    => Attendance::STATUS_WORKING,
+        ]);
+
+        /** @var \App\Models\User $user */
+        // 3. 勤怠一覧画面にアクセス
+        $response = $this->actingAs($user)
+            ->get(route('attendance.list')); // 勤怠一覧のルート名に合わせて変更
+
+        $response->assertStatus(200);
+
+        // 4. 画面に退勤時刻が表示されているか確認
+        $response->assertSee('18:00');
     }
-}
+    }

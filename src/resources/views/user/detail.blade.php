@@ -9,7 +9,7 @@
     <div class="attendance-inner">
         <h2 class="detail__heading content__heading">勤怠詳細</h2>
 
-        <form action="{{ route('attendance.store', ['id' => $attendance->id]) }}" method="POST" novalidate>
+        <form action="{{ route('attendance.detailstore', ['id' => $attendance->id]) }}" method="POST" novalidate>
             @csrf
             <div class="detail__content">
                 <table class="detail__table">

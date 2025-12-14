@@ -53,7 +53,7 @@ class UserAttendanceRequest extends FormRequest
                 $bs = !empty($break['start']) ? Carbon::createFromFormat('H:i', $break['start']) : null;
                 $be = !empty($break['end']) ? Carbon::createFromFormat('H:i', $break['end']) : null;
 
-                if ($bs && $ci && $bs->lt($ci)) {
+                if ($bs && $co && $bs->gt($co)) {
                     $validator->errors()->add("breaks.$index.start", '休憩時間が不適切な値です');
                     continue;
                 }

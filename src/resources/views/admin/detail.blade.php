@@ -9,7 +9,7 @@
     <div class="attendance-inner">
         <h2 class="detail__heading content__heading">勤怠詳細</h2>
 
-        <form action="{{ route('admin.attendance.request', $attendance->id) }}" method="POST"  novalidate>
+        <form action="{{ route('admin.attendance.request', $attendance->id) }}" method="POST" novalidate>
             @csrf
             <div class="detail__inner">
                 <table class="detail__table">
@@ -104,6 +104,10 @@
                         </tr>
                 </table>
 
+                @if(session('message'))
+                <div class="alert-warning">{{ session('message') }}</div>
+                @endif
+
                 @if (session('error'))
                 <div class="alert-danger">
                     {{ session('error') }}
@@ -114,9 +118,7 @@
                     @if($isEditable)
                     <button type="submit" class="detail-submit">修正</button>
                     @endif
-                    @if($message)
-                    <div class="alert-warning">{{ $message }}</div>
-                    @endif
+                   
                 </div>
             </div>
         </form>

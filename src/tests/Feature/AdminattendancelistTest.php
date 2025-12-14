@@ -24,7 +24,7 @@ class AdminattendancelistTest extends TestCase
         // 一般ユーザーを複数作成
         $users = User::factory()->count(3)->create(['role' => 'user']);
         $targetDate = Carbon::today();
-        
+
         foreach ($users as $user) {
         // それぞれのユーザーに勤怠を作成
         $attendance = Attendance::factory()->create([
@@ -54,10 +54,10 @@ class AdminattendancelistTest extends TestCase
         }
 
         // 勤怠の時刻や休憩も確認（フォーマットは Blade に合わせる）
-        $response->assertSee('09:00'); // 出勤
-        $response->assertSee('18:00'); // 退勤
-        $response->assertSee('8:00');  // work_minutes_total が formatMinutes() で変換される場合
-        $response->assertSee('1:00');  // break_minutes_total が formatMinutes() で変換される場合
+        $response->assertSee(\Carbon\Carbon::parse($attendance->clock_in)->format('H:i')); // 出勤
+        $response->assertSee(\Carbon\Carbon::parse($attendance->clock_out)->format('H:i'));  // 退勤
+        $response->assertSee(formatMinutes($attendance->work_minutes_total));
+        $response->assertSee(formatMinutes($attendance->break_minutes_total));  // break_minutes_total が formatMinutes() で変換される場合
     }
 
     public function test_遷移した際に現在の日付が表示される() 

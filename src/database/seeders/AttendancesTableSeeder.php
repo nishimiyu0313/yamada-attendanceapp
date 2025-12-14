@@ -27,11 +27,6 @@ class AttendancesTableSeeder extends Seeder
                     'work_date' => $workDate->format('Y-m-d'),
                 ]);
 
-                \App\Models\BreakTime::factory()
-                    ->count(rand(1, 2))
-                    ->create([
-                        'attendance_id' => $attendance->id,
-                    ]);
             }
         }
     }
