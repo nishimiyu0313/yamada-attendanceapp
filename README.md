@@ -35,9 +35,27 @@ DBのテーブルにダミーデータを投入
 
 7 ストレージに保存したファイルを表示するためシンボリックリンクを作成
 php artisan storage:link
+
 ```
-## テストユーザ
+##　権限管理
 ```
+本アプリでは'role'によって権限を分けている
+
+```
+##　管理者ユーザー
+```
+初期データとして管理者ユーザーをSeederで登録
+名前：admin taro
+メールアドレス：admin@email
+パスワード：adminpassword
+
+```
+## 認証メール確認
+```
+
+本アプリではメール認証機能Mailhog を使用
+1.会員登録後、確認メールを送信
+2.メール内リンククリックで認証
 
 ```
 
@@ -79,6 +97,8 @@ php artisan test
 ```
 ・環境構築：http://localhost/
 ・phpMyAdmin:http://localhost:8080/
+・Mailhog: http://localhost:8025
+
 ```
 
 ## ER図
