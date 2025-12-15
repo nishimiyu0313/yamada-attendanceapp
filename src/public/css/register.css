@@ -92,6 +92,11 @@
     text-align: center;
 }
 
+.login__button-submit {
+    text-decoration: none;
+    color: #0073CC;
+}
+
 @media screen and (min-width: 768px) and (max-width: 850px) {
     .header {
         flex-direction: column;

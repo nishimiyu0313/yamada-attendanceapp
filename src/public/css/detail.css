@@ -31,7 +31,7 @@ body,
 }
 
 .detail__table tr {
-    border-bottom: 3px solid #ddd; /* 行ごとに区切る */
+    border-bottom: 3px solid #f0f0f0; /* 行ごとに区切る */
 }
 
 .detail__table th,
@@ -121,4 +121,25 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     text-align: right;
     margin-right: 80px;
     color: #f70404;
+}
+
+@media screen and (max-width: 851px) {
+    .detail__table tr {
+        display: block;
+        margin-bottom: 12px;
+    }
+
+    .detail__table th,
+    .detail__table td {
+        display: block;
+        width: 100%;
+        padding: 4px 0;
+        text-align: center;
+    }
+    .time-range {
+        display: flex; /* フレックスコンテナにする */
+        justify-content: center; /* 横方向中央揃え */
+        align-items: center; /* 縦方向中央揃え */
+        gap: 8px;
+    }
 }

@@ -12,7 +12,9 @@
 <body>
     <div class="app">
         <header class="header">
-            <img src="{{ asset('images/logo.pmg1.svg') }}" alt="COACHTECHロゴ">
+            <a class="header__heading">
+                <img src="{{ asset('images/logo.pmg1.svg') }}" alt="COACHTECHロゴ">
+            </a>
         </header>
         <main>
 
@@ -61,6 +63,10 @@
                         <button class="form__button-submit" type="submit">管理者ログインする</button>
                     </div>
                 </form>
-               
+
             </div>
         </main>
+    </div>
+</body>
+
+</html>

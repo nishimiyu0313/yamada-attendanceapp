@@ -82,3 +82,10 @@ a.btn-month{
     font-weight: bold;     /* 太字 */
     text-decoration: none;
 }
+
+@media screen and (max-width: 851px) {
+.index__inner {
+    margin: 70px 15px;
+    width: 100%;
+}
+}

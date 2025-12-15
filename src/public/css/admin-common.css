@@ -1,4 +1,4 @@
-.header {   
+.header {
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -19,8 +19,6 @@
     width: 300px;
 }
 
-
-
 .admin__target-btn {
     width: 90px;
     height: 30px;
@@ -32,10 +30,10 @@
 
 .search-form__keyword-input {
     width: 100%;
-    height: 45px;   
+    height: 45px;
     border-radius: 5px;
     margin-top: 15px;
-    font-size:23px
+    font-size: 23px;
 }
 
 .header-nav__item {
@@ -43,7 +41,6 @@
 }
 
 .header-nav__button {
-   
     height: 30px;
     color: #f9f5f9;
     background: #050505;
@@ -51,20 +48,17 @@
     border: none;
     margin: 5px;
     font-size: 25px;
-
 }
 
-
-@media screen and (max-width: 850px) {
+@media screen and (max-width: 851px) {
     .header {
-    flex-direction: column; 
-    align-items: center;
-    height: auto; 
-    max-width: 100%; 
-    padding: 10px;
-  }
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+        max-width: 100%;
+        padding: 10px;
+    }
 }
 
 @media screen and (min-width: 1400px) and (max-width: 1540px) {
-
 }

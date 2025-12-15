@@ -91,6 +91,11 @@
     text-align: center;
 }
 
+.register__button-submit { 
+ text-decoration: none;
+    color: #0073CC;
+}
+
 @media screen and (max-width: 850px) {
     .header {
         flex-direction: column;

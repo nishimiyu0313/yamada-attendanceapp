@@ -13,19 +13,16 @@ body,
 .attendance-inner {
     margin: 70px 15px;
     width: 90%;
-       position: relative;
+    position: relative;
 }
 
 .content__heading {
     margin-left: 90px;
 }
 
-
 .detail-content {
     width: 100%;
 }
-
-
 
 .detail__table {
     width: 80%;
@@ -36,7 +33,7 @@ body,
 }
 
 .detail__table tr {
-    border-bottom: 3px solid #ddd; /* 行ごとに区切る */
+    border-bottom: 3px solid #f0f0f0; /* 行ごとに区切る */
 }
 
 .detail__table th,
@@ -45,38 +42,35 @@ body,
     text-align: left;
     vertical-align: middle;
     border-radius: 10px;
-   
 }
 
 .detail__table th {
     width: 200px;
     background-color: #fff;
-     
 }
 
 .detail__table td.editable {
-   
     background-color: #fff;
 }
 
-.detail__table td.editable-cell input{
+.detail__table td.editable-cell input {
     width: 100px;
     border: none;
     padding: 5px;
     box-sizing: border-box;
-     border: 1.5px solid #ddd;
-     border-radius: 5px;
-     text-align: center;
+    border: 1.5px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
     height: 35px;
 }
 
 .detail__table td.editable-cell textarea {
-border: none;
+    border: none;
     padding: 5px;
     box-sizing: border-box;
-     border: 1.5px solid #ddd;
-     border-radius: 5px;
-     text-align: center;
+    border: 1.5px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
     height: 35px;
     width: 300px;
 }
@@ -94,7 +88,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .time-range {
     display: flex;
     align-items: center;
-    gap: 8px;  /* 時刻と〜の間隔 */
+    gap: 8px; /* 時刻と〜の間隔 */
 }
 
 .time-range input[type="time"] {
@@ -106,16 +100,15 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     color: #555;
 }
 
-
 .detail-submit {
     width: 130px;
     height: 50px;
     position: absolute;
     margin-top: 20px;
- right:70px;
- background-color: #020202;
- color: #fff;
- font-size: 25px;
+    right: 70px;
+    background-color: #020202;
+    color: #fff;
+    font-size: 25px;
 }
 
 .alert-warning {
@@ -132,5 +125,23 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     color: #f70404;
 }
 
+@media screen and (max-width: 851px) {
+    .detail__table tr {
+        display: block;
+      
+    }
 
-
+    .detail__table th,
+    .detail__table td {
+        display: block;
+        width: 100%;
+        padding: 4px 0;
+        text-align: center;
+    }
+    .time-range {
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        gap: 8px;
+    }
+}

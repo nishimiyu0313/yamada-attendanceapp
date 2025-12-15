@@ -13,7 +13,7 @@
 <body>
     <div class="app">
         <header class="header">
-            <a class="header__heading" href="/">
+            <a class="header__heading">
                 <img src="{{ asset('images/logo.pmg1.svg') }}" alt="COACHTECHロゴ">
             </a>
 

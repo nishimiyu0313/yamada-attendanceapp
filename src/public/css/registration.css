@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px; 
+    gap: 20px;
     background-color: white;
     padding: 40px;
     border-radius: 10px;
@@ -10,14 +10,13 @@
 }
 .registration-form__content {
     display: flex;
-    justify-content: center;   /* 横方向の中央 */
-    align-items: center;       /* 縦方向の中央 */
-    height: 100vh;             /* 画面全体の高さ */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-
 .registration-inner {
-    display: flex;             /* ←これが必要 */
+    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -28,20 +27,17 @@
     background-color: #f0f0f0;
     color: #2c3e50;
     margin-bottom: 8px;
-    text-align: center; 
+    text-align: center;
     border-radius: 10px;
     height: 40px;
     width: 100px;
 
-    display: flex;            /* 横・縦中央寄せのため */
-    justify-content: center;  /* 水平方向の中央寄せ */
-    align-items: center;  
-
-    box-sizing: border-box;   
-
-   
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 }
+
 .attendance-btn {
     display: flex;
     justify-content: center;
@@ -60,7 +56,7 @@
     display: flex;
     text-align: center;
     justify-content: center;
-        margin-bottom: 40px;
+    margin-bottom: 40px;
 }
 .form-btn {
     display: flex;
@@ -84,9 +80,8 @@
 }
 .attendance-footer {
     display: flex;
-    justify-content: center; 
-    align-items: flex-end;   
-    height: 100px;            
+    justify-content: center;
+    height: 100px;
 }
 
 .btn:hover {
@@ -95,4 +90,33 @@
 
 .text-muted {
     font-weight: bold;
+    font-size: 26px;
+}
+
+@media screen and (max-width: 851px) {
+    .registration-form__content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin-top: -70px;
+    }
+
+    .registration-form__btn {
+        padding: 10px 20px;
+        font-size: 18px;
+        color: #f9f5f9;
+        background: #050505;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 10px;
+        width: 180px;
+        height: 60px;
+        font-size: 25px;
+        margin: 13px;
+    }
+
+   
 }

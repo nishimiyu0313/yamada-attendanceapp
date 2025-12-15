@@ -1,0 +1,42 @@
+.header {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    background: #050505;
+    height: 82px;
+    width: 100%;
+    max-width: 1550px;
+}
+
+.header img {
+    width: 300px;
+}
+
+.verify-form__content {
+    display: flex;
+    flex-direction: column;    
+    justify-content: center;    
+    align-items: center;      
+    height: 100vh;        
+    text-align: center;        
+    gap: 20px; 
+
+    margin-top: -50px;
+}
+
+.verify-form__content p {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.resend-button  {
+    text-decoration: none ;
+    color: #0073CC;
+    justify-content: center; 
+    margin-top: 60px;
+    background: none;          
+    border: none;   
+    cursor: pointer; 
+    font-size: 20px;
+}

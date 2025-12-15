@@ -114,7 +114,6 @@ button.approve-submit {
     border-radius: 5px;
 }
 
-
 .approved-submit {
     width: 130px;
     height: 50px;
@@ -129,6 +128,22 @@ button.approve-submit {
     border-radius: 5px;
 }
 
+@media screen and (max-width: 851px) {
+    .approve__table tr {
+        display: block;
+    }
 
-
-
+    .approve__table th,
+    .approve__table td {
+        display: block;
+        width: 100%;
+        padding: 4px 0;
+        text-align: center;
+    }
+    .time-range {
+        display: flex; /* フレックスコンテナにする */
+        justify-content: center; /* 横方向中央揃え */
+        align-items: center; /* 縦方向中央揃え */
+        gap: 8px;
+    }
+}

@@ -1,17 +1,15 @@
 body {
-    background-color:#eaeaeae5;
-} 
-
+    background-color: #eaeaeae5;
+}
 
 .list-form__content {
     max-width: 1200px;
-margin: 0 auto;
-padding: 0 60px;
-justify-items: center;
+    margin: 0 auto;
+    padding: 0 60px;
+    justify-items: center;
 }
 
 .content__heading {
-    
 }
 
 .list__inner {
@@ -20,8 +18,7 @@ justify-items: center;
 }
 
 .request-buttons {
-
-display: flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     width: 200px;
@@ -29,8 +26,8 @@ display: flex;
     font-size: 18px;
 }
 
-a.btn{
-    color: #000;     /* 太字 */
+a.btn {
+    color: #000; /* 太字 */
     text-decoration: none;
 }
 
@@ -39,50 +36,43 @@ a.active {
     color: #000;
 }
 
-
-
-
 .toppage-list {
     font-size: 15px;
     display: flex;
-    height: 47px;    
+    height: 47px;
     top: 127px;
     border-bottom: 1px solid #000;
-} 
- 
+}
+
 .toppage-list h3 {
-  margin: 0;
+    margin: 0;
 }
 .approved {
     margin-left: 50px;
 }
 
-
-
 .list__table {
     margin-top: 16px;
     width: 100%;
     border-collapse: collapse;
-     background-color: #fff;
-       border-radius: 10px;
-       color: #727272;
-        font-weight: bold;
+    background-color: #fff;
+    border-radius: 10px;
+    color: #727272;
+    font-weight: bold;
 }
 
-.detail__data a{
+.detail__data a {
     color: #000;
-    font-weight: bold;     /* 太字 */
+    font-weight: bold; /* 太字 */
     text-decoration: none;
 }
 .list__row {
     border: 3px solid #eaeaeae5;
-  
 }
 
 .list-table tr {
-    border-bottom:2px solid #ddd; /* 行ごとに区切る */
+    border-bottom: 2px solid #ddd; /* 行ごとに区切る */
 }
-
 
 .list__label,
 .list__data {
@@ -91,5 +81,12 @@ a.active {
 }
 
 .list__status {
-text-align: center;
+    text-align: center;
+}
+
+@media screen and (max-width: 851px) {
+    .list__inner {
+        margin: 70px 15px;
+        width: 100%;
+    }
 }
