@@ -50,6 +50,11 @@ php artisan storage:link
 パスワード：adminpassword
 
 ```
+## 一般ユーザー
+```
+初期データとしてSeeder/Factory により複数ユーザーを作成している
+
+```
 ## 認証メール確認
 ```
 
