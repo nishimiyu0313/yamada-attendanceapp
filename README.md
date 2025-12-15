@@ -44,7 +44,7 @@ php artisan storage:link
 ```
 ## 管理者ユーザー
 ```
-初期データとして管理者ユーザーをSeederで登録
+初期データとして管理者ユーザーをSeederにより登録
 名前：admin taro
 メールアドレス：admin@email
 パスワード：adminpassword
