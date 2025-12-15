@@ -52,7 +52,7 @@ php artisan storage:link
 ```
 ## 一般ユーザー
 ```
-初期データとしてSeeder/Factory により複数ユーザーを作成している
+初期データとしてSeeder/Factory により複数ユーザー登録
 
 ```
 ## 認証メール確認
