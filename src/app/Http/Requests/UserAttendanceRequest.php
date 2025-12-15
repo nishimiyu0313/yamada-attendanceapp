@@ -58,13 +58,12 @@ class UserAttendanceRequest extends FormRequest
                     continue;
                 }
 
-                // (2) 休憩終了が休憩開始より前 → NG
+                // 休憩終了が休憩開始より前 → NG  整合性を保つための補足チェック
                 if ($bs && $be && $be->lt($bs)) {
                     $validator->errors()->add("breaks.$index.end", '休憩時間が不適切な値です');
                     continue;
                 }
 
-                // (3) 休憩終了が退勤より後 → NG
                 if ($be && $co && $be->gt($co)) {
                     $validator->errors()->add("breaks.$index.end", '休憩時間もしくは退勤時間が不適切な値です');
                     continue;
