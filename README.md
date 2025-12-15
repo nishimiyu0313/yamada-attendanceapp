@@ -96,6 +96,7 @@ php artisan test
 ・PHP8.0
 ・laravel 10.0
 ・MySQL 8.0
+・Mailhog　（開発環境：メール送信確認用）
 ```
 
 ## URL
