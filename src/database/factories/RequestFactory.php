@@ -12,7 +12,7 @@ class RequestFactory extends Factory
     public function definition(): array
     {
         return [
-            'attendance_id' => 1, // これは必須FKがある場合。nullableなら不要
+            'attendance_id' => 1,
             'requested_clock_in' => '09:00:00',
             'requested_clock_out' => '18:00:00',
             'reason' => '修正申請テスト',

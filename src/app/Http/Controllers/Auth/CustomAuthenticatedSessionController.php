@@ -18,7 +18,7 @@ class CustomAuthenticatedSessionController extends Controller
         if ($request->routeIs('admin.*')) {
             return redirect('/admin/login');
         }
-        // ログアウト後に飛ばしたいページ
-        return redirect('/login');  // ここを好きなURLに変更
+       
+        return redirect('/login');  
     }
 }

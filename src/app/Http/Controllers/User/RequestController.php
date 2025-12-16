@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Requests\UserAttendanceRequest;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use App\Models\RequestBreak;
 use App\Models\Request as AttendanceRequest;
@@ -13,10 +11,10 @@ use Carbon\Carbon;
 
 class RequestController extends Controller
 {
-       
-       public function store(UserAttendanceRequest $request, $id)
-{
-    $attendance = Attendance::findOrFail($id);
+
+    public function store(UserAttendanceRequest $request, $id)
+    {
+        $attendance = Attendance::findOrFail($id);
 
         $today = Carbon::today()->format('Y-m-d');
         $workDate = Carbon::parse($attendance->work_date)->format('Y-m-d');
@@ -24,8 +22,6 @@ class RequestController extends Controller
         if ($workDate === $today) {
             return back()->with('error', '当日の勤怠は修正申請できません。');
         }
-
-      
 
         $requestedClockIn = Carbon::parse("$workDate {$request->clock_in}");
         $requestedClockOut = $request->clock_out
@@ -41,10 +37,10 @@ class RequestController extends Controller
             'status'               => 'applied',
         ]);
 
-        // Break 1
+
         foreach ($request->breaks ?? [] as $breakInput) {
             if (empty($breakInput['id'])) continue;
-            if (empty($breakInput['start']) && empty($breakInput['end'])) continue; // ←追加
+            if (empty($breakInput['start']) && empty($breakInput['end'])) continue;
 
             RequestBreak::create([
                 'request_id' => $attendanceRequest->id,
@@ -54,12 +50,8 @@ class RequestController extends Controller
             ]);
         }
 
-
-
-
         return redirect()
             ->route('attendance.request', ['status' => 'applied'])
             ->with('success', '修正申請を承認待ちに追加しました。');
     }
-
 }

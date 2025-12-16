@@ -1,5 +1,5 @@
 body {
-    background-color: #eaeaeae5;
+    background-color: #f0eff2;
 }
 
 .list-form__content {
@@ -29,7 +29,7 @@ body {
 }
 
 .index__row {
-    border: 1px solid #e0dfde;
+    border: 3px solid #f0eff2;
 }
 
 .index__label,
@@ -47,7 +47,7 @@ body {
 
 .detail__data a {
     color: #000;
-    font-weight: bold; /* 太字 */
+    font-weight: bold;
     text-decoration: none;
 }
 

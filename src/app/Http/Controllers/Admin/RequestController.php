@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UpdateAttendanceRequest;
 use App\Models\Request as AttendanceRequest;
 use App\Models\BreakTime;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +19,6 @@ class RequestController extends Controller
             ->where('status', $status)
             ->groupBy('attendance_id');
 
-        // 取得したIDで本体を取得
         $requests = AttendanceRequest::with('attendance.user')
             ->whereIn('id', $subQuery)
             ->orderBy('applied_date', 'desc')
@@ -48,7 +44,6 @@ class RequestController extends Controller
         }
 
 
-
         return view('admin.approve', compact('attendanceRequest', 'attendance'));
     }
 
@@ -62,14 +57,13 @@ class RequestController extends Controller
 
         DB::transaction(function () use ($attendanceRequest) {
 
-            // Attendance を更新
             $attendance = $attendanceRequest->attendance;
             $attendance->clock_in  = $attendanceRequest->requested_clock_in;
             $attendance->clock_out = $attendanceRequest->requested_clock_out;
-            // $attendance->reason = ... ← これは入れない
+
             $attendance->save();
 
-            // BreakTime を更新
+
             foreach ($attendanceRequest->breaks as $reqBreak) {
                 $break = BreakTime::find($reqBreak->break_id);
                 if ($break) {
@@ -79,7 +73,7 @@ class RequestController extends Controller
                 }
             }
 
-            // 申請を承認済みに更新
+
             $attendanceRequest->status = 'approved';
             $attendanceRequest->approver_id = Auth::id();
             $attendanceRequest->save();
@@ -89,4 +83,3 @@ class RequestController extends Controller
             ->with('success', '勤怠修正申請を承認しました。');
     }
 }
-

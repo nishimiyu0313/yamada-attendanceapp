@@ -22,7 +22,6 @@
                 <p>
                     登録していただいたメールアドレスに認証メールを送付しました。<br>
                     メール認証を完了してください。
-
                 </p>
 
                 @if (session('status') == 'verification-link-sent')
@@ -37,11 +36,9 @@
                         認証メールを再送する
                     </button>
                 </form>
-
             </div>
         </main>
     </div>
-
 </body>
 
 </html>

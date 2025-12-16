@@ -16,7 +16,7 @@ class BreakTimeFactory extends Factory
     public function definition()
     {
         return [
-            'attendance_id' => null, // 作成時に指定
+            'attendance_id' => null, 
             'break_start' => Carbon::today()->setTime(12, 0),
             'break_end'   => Carbon::today()->setTime(12, 30),
         ];

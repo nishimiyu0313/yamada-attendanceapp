@@ -32,16 +32,9 @@ class Request extends Model
         return $this->belongsTo(Attendance::class, 'attendance_id');
     }
 
-    // 紐づく休憩申請
-    /*public function breaks()
-    {
-        return $this->hasMany(RequestBreak::class, 'break_id', 'id'); // break_id が Request.id を参照
-    }*/
-
     public function breaks()
     {
         return $this->hasMany(RequestBreak::class, 'request_id', 'id');
     }
 
-    
 }

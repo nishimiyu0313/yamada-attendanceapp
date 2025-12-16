@@ -18,10 +18,6 @@ class RequestBreak extends Model
         'requested_break_end',
     ];
 
-    /*public function request()
-    {
-        return $this->belongsTo(Request::class, 'break_id', 'id');
-    }*/
 
     public function break()
     {

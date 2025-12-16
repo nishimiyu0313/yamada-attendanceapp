@@ -1,18 +1,16 @@
-
-
 body {
-    background-color:#eaeaeae5;
+    background-color: #f0eff2;
 }
 
 .index-form__content {
     max-width: 1200px;
-margin: 0 auto;
-padding: 0 60px;
-justify-items: center;
+    margin: 0 auto;
+    padding: 0 60px;
+    justify-items: center;
 }
 
 .index__inner {
-   margin: 70px 15px;
+    margin: 70px 15px;
     width: 80%;
 }
 
@@ -21,7 +19,7 @@ justify-items: center;
 }
 
 .index__table {
-   margin-top: 20px;
+    margin-top: 20px;
     width: 100%;
     border-collapse: collapse;
     background-color: #ffffff;
@@ -34,34 +32,35 @@ justify-items: center;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;                    /* これが中央寄せのポイント */
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 12px 12px;
 }
 
-a.btn-month{
-    color: #555;     /* 太字 */
+a.btn-month {
+    color: #555;
     text-decoration: none;
-
 }
 
 .current-date {
     font-size: 20px;
     font-weight: bold;
     text-align: center;
-    flex: 1;                        /* 中央に固定 */
+    flex: 1;
+    appearance: none;
+    border: none;
 }
 
-
-
-
-
-
-
-
-
-
+.current-date {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    flex: 1;
+}
 
 .index__row {
-    border: 1px solid #e0dfde;
+    border: 3px solid #f0eff2;
 }
 
 .index__label,
@@ -73,19 +72,23 @@ a.btn-month{
 
 .index__data {
     padding: 16px 8px;
-    text-align: center; 
-    vertical-align: middle; 
+    text-align: center;
+    vertical-align: middle;
 }
 
-.detail__data a{
+.detail__data a {
     color: #000;
-    font-weight: bold;     /* 太字 */
+    font-weight: bold;
     text-decoration: none;
 }
 
-@media screen and (max-width: 851px) {
-.index__inner {
-    margin: 70px 15px;
-    width: 100%;
+.index__row {
+    border-bottom: 3px solid #f0f0f0;
 }
+
+@media screen and (max-width: 851px) {
+    .index__inner {
+        margin: 70px 15px;
+        width: 100%;
+    }
 }

@@ -7,7 +7,7 @@
 @section('content')
 <div class="attendance-form__content">
     <div class="attendance__inner">
-        <h2 class="attendance__heading content__heading"> {{ $staff->name }}の勤怠</h2>
+        <h2 class="attendance__heading content__heading"> {{ $staff->name }}さんの勤怠</h2>
         <div class="date-display">
             <div class="date-nav">
                 <a href="?work_date={{ $prevDate }}" class="month-btn">← 前月</a>
@@ -108,10 +108,8 @@
                 <form action="{{ '/csv?' . http_build_query(request()->query()) }}" method="get">
                     <input class="csv-submit" type="submit" value="CSV出力">
                 </form>
-
             </div>
         </div>
-
     </div>
 </div>
 @endsection

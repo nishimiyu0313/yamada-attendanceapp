@@ -12,8 +12,8 @@ use App\Models\Request as AttendanceRequest;
 class AttendanceController extends Controller
 {
 
-public function create(Request $request)
-{
+    public function create(Request $request)
+    {
         $user = Auth::user();
 
         $attendance = Attendance::where('user_id', $user->id)
@@ -21,9 +21,9 @@ public function create(Request $request)
             ->first();
 
         $status = $attendance ? $attendance->status : null;
-    
-    return view('user.registration', compact('attendance', 'status'));
-}
+
+        return view('user.registration', compact('attendance', 'status'));
+    }
     public function store(Request $request)
     {
         $user = Auth::user();
@@ -48,15 +48,15 @@ public function create(Request $request)
 
     public function update($id)
     {
-        
+
         $attendance = Attendance::findOrFail($id);
 
-       
+
         if ($attendance->clock_out) {
             return redirect()->back()->with('error', 'すでに退勤済みです。');
         }
 
-        
+
         $attendance->update([
             'clock_out' => Carbon::now(),
             'status'    => Attendance::STATUS_FINISHED,
@@ -99,18 +99,18 @@ public function create(Request $request)
             ->findOrFail($id);
 
         if ($attendance->user_id !== auth()->id()) {
-            abort(403); // 他人の勤怠はアクセス禁止
+            abort(403);
         }
 
         $latestRequest = $attendance->requests()->with('breaks')->latest()->first();
 
         if ($latestRequest) {
 
-            // 出勤・退勤の反映
+
             $attendance->clock_in  = $latestRequest->requested_clock_in;
             $attendance->clock_out = $latestRequest->requested_clock_out;
 
-            // 休憩の反映
+
             foreach ($attendance->breaks as $break) {
                 $reqBreak = $latestRequest->breaks?->where('break_id', $break->id)->first();
 
@@ -124,8 +124,8 @@ public function create(Request $request)
 
         return view('user.detail', [
             'attendance' => $attendance,
-            'isEditable' => $attendance->can_edit, // 修正可能かどうか
-            'message' => $attendance->can_edit ? null : '*修正待ちのため修正はできません。', // 修正不可ならメッセージ
+            'isEditable' => $attendance->can_edit,
+            'message' => $attendance->can_edit ? null : '*修正待ちのため修正はできません。',
         ]);
     }
 
@@ -163,7 +163,7 @@ public function create(Request $request)
         ]);
     }
 
-    
+
 
     public function request(Request $request)
     {
@@ -172,7 +172,7 @@ public function create(Request $request)
         $requests = AttendanceRequest::with('attendance.user')
             ->where('status', $status)
             ->whereHas('attendance', function ($q) {
-                $q->where('user_id', auth()->id()); // ログインユーザーの勤怠だけ
+                $q->where('user_id', auth()->id());
             })
             ->orderBy('applied_date', 'desc')
             ->get()
@@ -181,5 +181,4 @@ public function create(Request $request)
 
         return view('user.request', compact('requests', 'status'));
     }
-
 }

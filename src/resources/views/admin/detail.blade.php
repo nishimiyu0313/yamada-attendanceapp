@@ -22,6 +22,7 @@
                     $weekdays = ['日', '月', '火', '水', '木', '金', '土'];
                     $today = \Carbon\Carbon::now();
                     @endphp
+
                     <tr>
                         <th>日付</th>
                         <td>{{ \Carbon\Carbon::parse($attendance->work_date)->format('Y年m月d日') }}
@@ -118,7 +119,7 @@
                     @if($isEditable)
                     <button type="submit" class="detail-submit">修正</button>
                     @endif
-                   
+
                 </div>
             </div>
         </form>

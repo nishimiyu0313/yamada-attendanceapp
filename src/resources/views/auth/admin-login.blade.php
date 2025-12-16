@@ -17,7 +17,6 @@
             </a>
         </header>
         <main>
-
             <div class="login-form__content">
                 <div class="login-form__heading">
                     <h2>管理者ログイン</h2>
@@ -63,7 +62,6 @@
                         <button class="form__button-submit" type="submit">管理者ログインする</button>
                     </div>
                 </form>
-
             </div>
         </main>
     </div>

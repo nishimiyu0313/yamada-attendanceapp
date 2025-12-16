@@ -1,13 +1,7 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    background-color: white;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+body {
+    background-color: #f0eff2;
 }
+
 .registration-form__content {
     display: flex;
     justify-content: center;
@@ -24,11 +18,11 @@
 .status-display {
     font-size: 20px;
     font-weight: bold;
-    background-color: #f0f0f0;
+    background-color: #c8c8c8;
     color: #2c3e50;
     margin-bottom: 8px;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 50px;
     height: 40px;
     width: 100px;
 
@@ -43,6 +37,7 @@
     justify-content: center;
     align-items: center;
     margin-top: 20px;
+    flex-direction: row-reverse;
 }
 
 .date-display {
@@ -69,7 +64,7 @@
     color: #f9f5f9;
     background: #050505;
     border: none;
-    border-radius: 10px;
+    border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
     padding: 10px;
@@ -78,6 +73,12 @@
     font-size: 30px;
     margin: 13px;
 }
+
+.registration-form__btn.break_btn {
+    background: #ffffff;
+    color: #050505;
+}
+
 .attendance-footer {
     display: flex;
     justify-content: center;
@@ -108,7 +109,7 @@
         color: #f9f5f9;
         background: #050505;
         border: none;
-        border-radius: 10px;
+        border-radius: 20px;
         cursor: pointer;
         font-weight: bold;
         padding: 10px;
@@ -117,6 +118,4 @@
         font-size: 25px;
         margin: 13px;
     }
-
-   
 }

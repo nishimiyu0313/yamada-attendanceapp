@@ -26,8 +26,6 @@
                         <th class="index__label detail__label">詳細</th>
                     </tr>
 
-
-
                     @foreach ($attendances as $attendance)
                     <tr class="index__row">
                         <td class="index__data">{{ $attendance->user->name }}</td>
@@ -41,14 +39,7 @@
                     </tr>
                     @endforeach
                 </table>
-
-
-
-
-
-
             </div>
-
         </div>
     </div>
 </div>

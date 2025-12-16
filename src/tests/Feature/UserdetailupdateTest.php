@@ -21,7 +21,7 @@ class UserdetailupdateTest extends TestCase
 
         $response = $this->actingAs($user)->post(route('attendance.detailstore', ['id' => $user->id]), [
             'clock_in'  => '10:00',
-            'clock_out' => '09:00', // clock_inより後ではない
+            'clock_out' => '09:00',
             'reason'    => '業務開始',
         ]);
 
@@ -58,14 +58,13 @@ class UserdetailupdateTest extends TestCase
                 'breaks' => [
                     [
                         'id' => $break->id,
-                        'start' => '19:00', // 退勤より後
+                        'start' => '19:00',
                         'end' => '19:30',
                     ]
                 ],
             ]
         );
 
-        // バリデーションエラー確認
         $response->assertSessionHasErrors([
             'breaks.0.start' => '休憩時間が不適切な値です',
         ]);
@@ -96,11 +95,10 @@ class UserdetailupdateTest extends TestCase
                 [
                     'id' => $break->id,
                     'start' => '12:00',
-                    'end' => '19:00', // 退勤より後
+                    'end' => '19:00',
                 ]
             ],
         ]);
-        // 4. バリデーションエラーを確認
 
         $response->assertSessionHasErrors([
             'breaks.0.end' => '休憩時間もしくは退勤時間が不適切な値です',
@@ -112,32 +110,31 @@ class UserdetailupdateTest extends TestCase
         /** @var \App\Models\User $user */
         $user = User::factory()->create();
 
-        // 2. 勤怠データ作成（過去日付にして早期 return を回避）
+
         $attendance = Attendance::create([
             'user_id'   => $user->id,
-            'work_date' => Carbon::yesterday(), // 今日でない
+            'work_date' => Carbon::yesterday(),
             'clock_in'  => Carbon::parse('09:00'),
             'clock_out' => Carbon::parse('18:00'),
             'status'    => Attendance::STATUS_WORKING,
         ]);
 
-        // 3. 勤怠詳細ページに POST で備考欄を空にして送信
+
         $response = $this->actingAs($user)->post(
             route('attendance.detailstore', ['id' => $attendance->id]),
             [
                 'clock_in'  => '09:00',
                 'clock_out' => '18:00',
-                'reason'    => '', // 空
+                'reason'    => '',
                 'breaks'    => [
                     ['id' => 1, 'start' => '12:00', 'end' => '12:30'],
                 ],
             ]
         );
 
-        // 4. バリデーションエラーがセッションにあるか確認
+
         $response->assertSessionHasErrors(['reason']);
 
-        // 5. メッセージまで確認
         $this->assertEquals(
             '備考を入力してください',
             session('errors')->get('reason')[0]
@@ -148,7 +145,7 @@ class UserdetailupdateTest extends TestCase
     {
         $user = User::factory()->create(['name' => 'テストユーザー']);
 
-        // ② 勤怠情報作成（任意の日付・時間で固定）
+
         $attendance = \App\Models\Attendance::create([
             'user_id'   => $user->id,
             'work_date' => '2025-12-13',
@@ -159,19 +156,18 @@ class UserdetailupdateTest extends TestCase
 
         /** @var \App\Models\User $user */
 
-        // ③ 該当ユーザーでログインし、勤怠詳細ページにアクセス
         $response = $this->actingAs($user)
             ->get(route('attendance.detail', ['id' => $attendance->id]));
 
-        // ④ Blade 表示と合わせて時刻をフォーマット
+
         $clockInFormatted  = \Carbon\Carbon::parse($attendance->clock_in)->format('H:i');
         $clockOutFormatted = \Carbon\Carbon::parse($attendance->clock_out)->format('H:i');
 
-        // ⑤ 出勤・退勤の時間が正しく表示されていることを確認
+
         $response->assertSee($clockInFormatted);
         $response->assertSee($clockOutFormatted);
 
-        // ⑥ ステータスコードも確認
+
         $response->assertStatus(200);
     }
 
@@ -181,7 +177,6 @@ class UserdetailupdateTest extends TestCase
 
         $admin = User::factory()->create(['role' => 'admin']);
 
-        // ② 勤怠情報作成
         $attendance = \App\Models\Attendance::create([
             'user_id'   => $user->id,
             'work_date' => '2025-12-13',
@@ -190,31 +185,27 @@ class UserdetailupdateTest extends TestCase
             'status'    => 'finished',
         ]);
 
-
-
-
-        // ③ 修正申請作成（承認待ち）
         $request = \App\Models\Request::create([
             'attendance_id' => $attendance->id,
             'user_id'       => $user->id,
             'reason'        => '修正理由',
             'status'        => 'applied',
-            'requested_clock_in' => now(),  // 必須なのでセット
+            'requested_clock_in' => now(),
             'requested_clock_out' => now()->addHours(8),
-            'applied_date' => now(),                // $fillable にあるのでセット可能
-            'approver_id' => $admin->id, // 承認待ち
+            'applied_date' => now(),
+            'approver_id' => $admin->id,
         ]);
 
 
         /** @var \App\Models\User $user */
-        // ④ ログインユーザーで自分の申請一覧ページにアクセス
-        $response = $this->actingAs($user)
-            ->get(route('attendance.request', ['status' => 'applied'])); // 承認待ち一覧のルート名
 
-        // ⑤ 作成した申請内容が全て表示されていることを確認
+        $response = $this->actingAs($user)
+            ->get(route('attendance.request', ['status' => 'applied']));
+
+
         $response->assertSee('修正理由');
 
-        // ユーザー名も表示される場合
+
         $response->assertSee($user->name);
 
         $response->assertStatus(200);
@@ -224,10 +215,10 @@ class UserdetailupdateTest extends TestCase
     {
         $user = User::factory()->create(['name' => 'ユーザー1']);
 
-        // ② 管理者作成
+
         $admin = User::factory()->create(['role' => 'admin']);
 
-        // ③ 勤怠情報作成
+
         $attendance = \App\Models\Attendance::create([
             'user_id'   => $user->id,
             'work_date' => '2025-12-13',
@@ -236,28 +227,26 @@ class UserdetailupdateTest extends TestCase
             'status'    => 'finished',
         ]);
 
-        // ④ 修正申請作成（承認済み）
         $request = \App\Models\Request::create([
             'attendance_id' => $attendance->id,
             'user_id'       => $user->id,
             'reason'        => '修正理由',
             'status'        => 'approved',
-            'requested_clock_in' => now(),  // 必須なのでセット
+            'requested_clock_in' => now(),
             'requested_clock_out' => now()->addHours(8),
-            'applied_date' => now(),                // $fillable にあるのでセット可能
-            'approver_id' => $admin->id, // 承認待ち
+            'applied_date' => now(),
+            'approver_id' => $admin->id,
         ]);
 
 
         /** @var \App\Models\User $user */
-        // ⑤ 管理者で承認済み申請一覧ページにアクセス
-        $response = $this->actingAs($user)
-            ->get(route('attendance.request', ['status' => 'approved'])); // 承認済み一覧のルート名
 
-        // ⑥ 作成した承認済み申請内容が全て表示されることを確認
+        $response = $this->actingAs($user)
+            ->get(route('attendance.request', ['status' => 'approved']));
+
         $response->assertSee('修正理由');
 
-        // 申請者の名前も表示される場合
+
         $response->assertSee($user->name);
 
         $response->assertStatus(200);
@@ -267,7 +256,6 @@ class UserdetailupdateTest extends TestCase
     {
         $user = User::factory()->create(['name' => 'テストユーザー']);
 
-        // ② 勤怠情報作成
         $attendance = \App\Models\Attendance::create([
             'user_id'   => $user->id,
             'work_date' => '2025-12-13',
@@ -276,40 +264,30 @@ class UserdetailupdateTest extends TestCase
             'status'    => 'finished',
         ]);
 
-        // ③ 修正申請作成
         $request = \App\Models\Request::create([
             'attendance_id' => $attendance->id,
             'reason'        => '修正理由',
             'status'        => 'approved',
-            'requested_clock_in' => now(),  // 必須なのでセット
+            'requested_clock_in' => now(),
             'requested_clock_out' => now()->addHours(8),
-            'applied_date' => now(),                // $fillable にあるのでセット可能
-            'approver_id' => null, // 承認待ち
+            'applied_date' => now(),
+            'approver_id' => null,
         ]);
 
         /** @var \App\Models\User $user */
         $indexResponse = $this->actingAs($user)
-            ->get(route('attendance.request')); // 一覧ページ
+            ->get(route('attendance.request'));
 
-        // 一覧に詳細リンクがあるか確認
         $indexResponse->assertSee('詳細');
 
-
-
-        // ④ 管理者作成
-
-        // 申請一覧ページのルート
 
         $detailResponse = $this->actingAs($user)
             ->get(route('attendance.detailrequest', $request->id));
         /** @var \Illuminate\Testing\TestResponse $detailResponse */
-        // ⑤ 申請詳細リンクが正しい申請IDに向いていることを確認
-       
-
 
 
         $detailResponse->assertStatus(200);
-        $detailResponse->assertViewIs('user.detail'); // ← Blade名
+        $detailResponse->assertViewIs('user.detail');
         $detailResponse->assertViewHas('attendance');
     }
 }

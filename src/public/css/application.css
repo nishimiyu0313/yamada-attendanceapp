@@ -1,5 +1,5 @@
 body {
-    background-color: #eaeaeae5;
+    background-color: #f0eff2;
 }
 
 .list-form__content {
@@ -7,9 +7,6 @@ body {
     margin: 0 auto;
     padding: 0 60px;
     justify-items: center;
-}
-
-.content__heading {
 }
 
 .list__inner {
@@ -27,12 +24,12 @@ body {
 }
 
 a.btn {
-    color: #000; /* 太字 */
+    color: #000;
     text-decoration: none;
 }
 
 a.active {
-    font-weight: bold; /* 現在のページだけ太字 */
+    font-weight: bold;
     color: #000;
 }
 
@@ -63,7 +60,7 @@ a.active {
 
 .detail__data a {
     color: #000;
-    font-weight: bold; /* 太字 */
+    font-weight: bold;
     text-decoration: none;
 }
 .list__row {
@@ -71,13 +68,13 @@ a.active {
 }
 
 .list-table tr {
-    border-bottom: 2px solid #ddd; /* 行ごとに区切る */
+    border-bottom: 2px solid #ddd;
 }
 
 .list__label,
 .list__data {
-    padding: 16px 8px;
-    text-align: left;
+    padding: 16px 18px;
+    text-align: center;
 }
 
 .list__status {

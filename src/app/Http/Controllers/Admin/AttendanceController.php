@@ -4,15 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
 use App\Http\Requests\AdminAttendanceRequest;
 use App\Models\Attendance;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Illuminate\Support\Facades\Date;
-use App\Models\RequestBreak;
-use App\Models\Request as AttendanceRequest;
-
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
@@ -26,7 +21,7 @@ class AttendanceController extends Controller
         $attendances = Attendance::with('user', 'breaks')
             ->where('work_date', $currentDate)
             ->whereHas('user', function ($query) {
-                $query->where('role', 'user'); // 管理者(admin)は除外
+                $query->where('role', 'user');
             })
             ->get();
 
@@ -37,8 +32,6 @@ class AttendanceController extends Controller
     public function staffindex(Request $request, $id)
     {
         $staff = User::findOrFail($id);
-        //dd($staff);
-
 
         $currentDate = $request->query('work_date') ? Carbon::parse($request->query('work_date')) : Carbon::today();
         $prevDate = $currentDate->copy()->subMonth()->format('Y-m-d');
@@ -55,14 +48,10 @@ class AttendanceController extends Controller
         $attendances = Attendance::with('breaks')
             ->where('user_id', $staff->id)
             ->whereMonth('work_date', $currentDate->month)
-            //->whereBetween('work_date', [$startOfMonth, $endOfMonth])
             ->whereYear('work_date', $currentDate->year)
             ->orderBy('work_date', 'asc')
             ->get()
             ->keyBy(fn($item) => $item->work_date->format('Y-m-d'));
-        //->keyBy('work_date');
-
-
 
         return view('admin.attendance', compact('staff', 'dates', 'attendances', 'currentDate', 'prevDate', 'nextDate'));
     }
@@ -71,10 +60,10 @@ class AttendanceController extends Controller
     public function csv(Request $request)
     {
 
-        $month = $request->month; // ← ここで月を受け取る
+        $month = $request->month;
 
         $query = Attendance::with('breaks')
-            ->where('user_id', auth()->id()); // ← 当該ユーザー
+            ->where('user_id', auth()->id());
 
         if ($month) {
             $year = substr($month, 0, 4);
@@ -109,7 +98,6 @@ class AttendanceController extends Controller
                 $breakMinutes = $attendance->break_minutes_total;
                 $workMinutes  = $attendance->work_minutes_total;
 
-                // 分 → 時:分 形式に変換
                 $breakH = intdiv($breakMinutes, 60);
                 $breakM = $breakMinutes % 60;
                 $breakTime = "{$breakH}:" . str_pad($breakM, 2, '0', STR_PAD_LEFT);
@@ -118,7 +106,6 @@ class AttendanceController extends Controller
                 $workM = $workMinutes % 60;
                 $workTime = "{$workH}:" . str_pad($workM, 2, '0', STR_PAD_LEFT);
 
-                // CSV行にまとめる
                 $row = [
                     $attendance->id,
                     $attendance->work_date,
@@ -147,16 +134,15 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::with(['user', 'breaks', 'requests'])->findOrFail($id);
 
-        // 承認待ちの申請があるかどうか
+
         $hasPendingRequest = $attendance->requests()
             ->where('status', 'applied')
             ->exists();
 
-        // 管理者用：承認待ちがあれば編集不可
         if (auth()->user()->is_admin) {
             $isEditable = true;
         } else {
-            // 一般ユーザーは承認待ちがあれば編集不可
+
             $isEditable = !$hasPendingRequest;
         }
 
@@ -175,7 +161,6 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::with('breaks', 'requests')->findOrFail($id);
 
-        // 承認待ち申請があれば更新不可
         $hasPendingRequest = $attendance->requests()->where('status', 'applied')->exists();
         if ($hasPendingRequest) {
             return back()->with('error', '*承認待ちのため修正できません。');
@@ -183,20 +168,12 @@ class AttendanceController extends Controller
 
         $workDate = $attendance->work_date->format('Y-m-d');
 
-        // 勤怠更新
+
         $attendance->clock_in  = $request->clock_in ? Carbon::parse("$workDate {$request->clock_in}") : null;
         $attendance->clock_out = $request->clock_out ? Carbon::parse("$workDate {$request->clock_out}") : null;
         $attendance->save();
 
-        // 休憩更新
-        //if ($attendance->breaks->count() > 0 && $request->has('breaks')) {
-        //foreach ($attendance->breaks as $index => $break) {
-        //  if (isset($request->breaks[$index]['start'], $request->breaks[$index]['end'])) {
-        //    $break->break_start = Carbon::parse("$workDate {$request->breaks[$index]['start']}");
-        //  $break->break_end   = Carbon::parse("$workDate {$request->breaks[$index]['end']}");
-        //$break->save();
-        // }
-        //}
+
         if ($request->has('breaks')) {
             foreach ($request->breaks as $index => $breakData) {
                 $break = $attendance->breaks[$index] ?? $attendance->breaks()->create([]);
@@ -211,11 +188,5 @@ class AttendanceController extends Controller
         }
 
         return redirect()->back()->with('message', '勤怠を修正しました。');
-
-    // 画面にそのままメッセージ表示
-   // $message = '勤怠を修正しました。';
-
-    //return view('admin.detail', ['attendance' => $attendance, 'isEditable' => true, 'message'    => $message,
-    //]);
-}
+    }
 }

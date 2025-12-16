@@ -11,9 +11,9 @@ class AttendanceFactory extends Factory
 {
     public function definition()
     {
-        $workDate = Carbon::today(); // 今日の日付を固定
-        $clockIn = $workDate->copy()->setTime(9, 0);  // 09:00出勤
-        $clockOut = $workDate->copy()->setTime(18, 0); // 勤務8時間
+        $workDate = Carbon::today();
+        $clockIn = $workDate->copy()->setTime(9, 0);  
+        $clockOut = $workDate->copy()->setTime(18, 0); 
 
         return [
             'user_id'   => \App\Models\User::factory(),

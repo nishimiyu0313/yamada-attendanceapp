@@ -43,7 +43,7 @@ class EmailverificationTest extends TestCase
     {
         $user = User::factory()->unverified()->create();
 
-        // メール認証リンク用の署名URLを作成
+
         $url = URL::temporarySignedRoute(
             'verification.verify',
             now()->addMinutes(60),
@@ -55,6 +55,6 @@ class EmailverificationTest extends TestCase
         $response->assertRedirect();
         $this->assertStringContainsString('/attendance', $response->headers->get('Location'));
 
-        $this->assertTrue($user->fresh()->hasVerifiedEmail()); 
+        $this->assertTrue($user->fresh()->hasVerifiedEmail());
     }
 }

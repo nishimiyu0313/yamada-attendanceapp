@@ -33,7 +33,7 @@ body,
 }
 
 .approve__table tr {
-    border-bottom: 3px solid #f0f0f0; /* 行ごとに区切る */
+    border-bottom: 3px solid #f0f0f0;
 }
 
 .approve__table th,
@@ -42,11 +42,13 @@ body,
     text-align: left;
     vertical-align: middle;
     border-radius: 10px;
+    font-weight: bold;
 }
 
 .approve__table th {
     width: 200px;
     background-color: #fff;
+    color: #737373;
 }
 
 .approve__table td.editable {
@@ -62,6 +64,7 @@ body,
     border-radius: 5px;
     text-align: center;
     height: 35px;
+    font-weight: bold;
 }
 
 .approve__table td.editable-cell textarea {
@@ -88,7 +91,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .time-range {
     display: flex;
     align-items: center;
-    gap: 8px; /* 時刻と〜の間隔 */
+    gap: 8px;
 }
 
 .time-range input[type="time"] {
@@ -141,9 +144,9 @@ button.approve-submit {
         text-align: center;
     }
     .time-range {
-        display: flex; /* フレックスコンテナにする */
-        justify-content: center; /* 横方向中央揃え */
-        align-items: center; /* 縦方向中央揃え */
+        display: flex;
+        justify-content: center;
+        align-items: center;
         gap: 8px;
     }
 }

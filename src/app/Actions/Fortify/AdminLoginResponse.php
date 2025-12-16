@@ -15,6 +15,6 @@ class AdminLoginResponse implements LoginResponseContract
             return redirect('/admin/attendance/list');
         }
 
-        return redirect('/attendance'); // 一般ユーザーはトップページなど
+        return redirect('/attendance');
     }
 }

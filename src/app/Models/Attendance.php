@@ -75,21 +75,6 @@ class Attendance extends Model
         return $this->status === self::STATUS_FINISHED;
     }
 
-    public function totalBreakMinutes(): int
-    {
-        return $this->breaks->reduce(function ($carry, $break) {
-            $end = $break->break_end ?? now(); // 終了していない場合は現在時刻
-            return $carry + $end->diffInMinutes($break->break_start);
-        }, 0);
-    }
-
-    public function totalWorkMinutes(): int
-    {
-        $clockOut = $this->clock_out ?? now();
-        $workMinutes = $clockOut->diffInMinutes($this->clock_in);
-        return $workMinutes - $this->totalBreakMinutes();
-    }
-
     public function getBreakMinutesTotalAttribute(): int
     {
         return $this->breaks->sum(function ($break) {
@@ -106,7 +91,7 @@ class Attendance extends Model
 
     public function getCanEditAttribute()
     {
-        // 承認待ちの申請があれば修正不可
+       
         $hasPendingRequest = $this->requests()
             ->where('status', 'applied')
             ->exists();

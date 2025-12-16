@@ -34,7 +34,6 @@
 
                                 <span>～</span>
 
-
                                 <input type="time" name="clock_out"
                                     value="{{ old('clock_out', $attendance->clock_out ? \Carbon\Carbon::parse($attendance->clock_out)->format('H:i') : '') }}"
                                     @unless($isEditable) disabled @endunless>
@@ -61,7 +60,6 @@
 
                                 <span>～</span>
 
-
                                 <input type="time" name="breaks[{{ $index }}][end]"
                                     value="{{ old("breaks.$index.end", $break->break_end ? \Carbon\Carbon::parse($break->break_end)->format('H:i') : '') }}"
                                     @unless($isEditable) disabled @endunless>
@@ -73,8 +71,6 @@
                         </td>
                     </tr>
                     @endforeach
-
-
                     <tr>
                         <th>休憩{{ $breakCount + 1 }}</th>
                         <td class="editable">
@@ -87,8 +83,6 @@
                             </div>
                         </td>
                     </tr>
-
-
                     <tr>
                         <th>備考</th>
                         <td class="editable">
@@ -113,12 +107,7 @@
             @if($message)
             <div class="alert-warning">{{ $message }}</div>
             @endif
-
         </form>
-
     </div>
-
-
-
 </div>
 @endsection

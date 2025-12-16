@@ -17,7 +17,6 @@
                     class="btn {{ $status == 'approved' ? 'active' : '' }}">承認済み</a>
             </div>
         </div>
-
         <table class="list__table">
             <tr class="list__row">
                 <th class="list__label list__status">状態</th>
@@ -52,6 +51,4 @@
         </table>
     </div>
 </div>
-
-
 @endsection

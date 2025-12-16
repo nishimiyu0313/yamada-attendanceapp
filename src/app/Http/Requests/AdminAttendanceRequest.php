@@ -38,7 +38,7 @@ class AdminAttendanceRequest extends FormRequest
             $clockIn = $this->input('clock_in');
             $clockOut = $this->input('clock_out');
 
-            // Carbon に渡す前に空文字チェック
+
             $ci = $clockIn ? Carbon::createFromFormat('H:i', $clockIn) : null;
             $co = $clockOut ? Carbon::createFromFormat('H:i', $clockOut) : null;
 
@@ -46,7 +46,6 @@ class AdminAttendanceRequest extends FormRequest
                 $validator->errors()->add('clock_out', '出勤時間が不適切な値です');
             }
 
-            // 複数休憩チェック
             $breaks = $this->input('breaks', []);
 
 

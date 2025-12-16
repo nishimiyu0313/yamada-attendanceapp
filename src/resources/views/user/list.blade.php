@@ -55,7 +55,7 @@
             </div>
             <table class="list__table">
                 <tr class="list__row">
-                    <th class="list__label">日付</th>
+                    <th class="list__label date_label">日付</th>
                     <th class="list__label">出勤</th>
                     <th class="list__label">退勤</th>
                     <th class="list__label">休憩</th>
@@ -81,7 +81,7 @@
                         @endphp
                         {{ $h }}:{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}
                         @else
-                        
+
                         @endif
                     </td>
                     <td class="list__data">
@@ -92,14 +92,14 @@
                         @endphp
                         {{ $h }}:{{ str_pad($m, 2, '0', STR_PAD_LEFT) }}
                         @else
-                        
+
                         @endif
                     </td>
                     <td class="list__data detail__data">
                         @if($attendance)
                         <a href="{{ route('attendance.detail', $attendance->id) }}">詳細</a>
                         @else
-                        
+
                         @endif
                     </td>
                 </tr>
@@ -107,5 +107,5 @@
             </table>
         </div>
     </div>
-
-    @endsection
+</div>
+@endsection

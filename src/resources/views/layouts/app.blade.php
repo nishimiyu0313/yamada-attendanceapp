@@ -16,7 +16,6 @@
             <a class="header__heading">
                 <img src="{{ asset('images/logo.pmg1.svg') }}" alt="COACHTECHロゴ">
             </a>
-
             <ul class="header-nav">
                 <li class="header-nav__item">
 
@@ -35,26 +34,13 @@
                         <button class="header-nav__button">ログアウト</button>
                     </form>
                     @endif
-
                 </li>
-
-
             </ul>
         </header>
         <div class="content">
             @yield('content')
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
 </body>
 
 </html>

@@ -25,7 +25,6 @@
                     <th class="list__label">申請理由</th>
                     <th class="list__label">申請日時</th>
                     <th class="list__label">詳細</th>
-
                 </tr>
                 @foreach ($requests as $request)
                 <tr class="list__row">

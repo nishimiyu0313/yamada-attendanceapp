@@ -34,13 +34,13 @@
                         <button class="header-nav__button">ログアウト</button>
                     </form>
                     @endif
-
                 </li>
-
-
             </ul>
         </header>
         <div class="content">
             @yield('content')
         </div>
     </div>
+</body>
+
+</html>

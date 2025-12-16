@@ -17,7 +17,6 @@
             </a>
         </header>
         <main>
-
             <div class="login-form__content">
                 <div class="login-form__heading">
                     <h2>ログイン</h2>
