@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\Request;
 use App\Models\Attendance;
 use Carbon\Carbon;
 
@@ -27,6 +28,14 @@ class AttendancesTableSeeder extends Seeder
                     'work_date' => $workDate->format('Y-m-d'),
                 ]);
 
+                if ($i % 5 === 0) { // 適当に5日ごとに申請
+                    Request::factory()->create([
+                        'attendance_id' => $attendance->id,
+                        'status' => 'applied', // 承認待ち
+                        'requested_clock_in' => \Carbon\Carbon::parse($attendance->clock_in)->addHour(),
+                        'requested_clock_out' => \Carbon\Carbon::parse($attendance->clock_out)->addHour(),
+                    ]);
+                }
             }
         }
     }

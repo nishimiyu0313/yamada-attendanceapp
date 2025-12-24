@@ -102,30 +102,39 @@ class AttendanceController extends Controller
             abort(403);
         }
 
-        $latestRequest = $attendance->requests()->with('breaks')->latest()->first();
+        //$latestRequest = $attendance->requests()->with('breaks')->latest()->first();
+        // 承認待ちの最新申請のみ取得
+        $latestRequest = $attendance->requests()
+            ->where('status', 'applied') // 承認待ちのみ
+            ->latest()
+            ->first();
 
         if ($latestRequest) {
-
-
             $attendance->clock_in  = $latestRequest->requested_clock_in;
             $attendance->clock_out = $latestRequest->requested_clock_out;
 
-
             foreach ($attendance->breaks as $break) {
-                $reqBreak = $latestRequest->breaks?->where('break_id', $break->id)->first();
-
+                $reqBreak = $latestRequest->breaks?->firstWhere('break_id', $break->id);
                 if ($reqBreak) {
                     $break->break_start = $reqBreak->requested_break_start;
                     $break->break_end   = $reqBreak->requested_break_end;
                 }
             }
-        }
+   
+        $isEditable = false;
+        $message = '*修正待ちのため修正はできません。';
+    } else {
+        // 修正可能
+        $isEditable = $attendance->can_edit;
+        $message = $attendance->can_edit ? null : '*修正待ちのため修正はできません。';
+    }
+
 
 
         return view('user.detail', [
             'attendance' => $attendance,
-            'isEditable' => $attendance->can_edit,
-            'message' => $attendance->can_edit ? null : '*修正待ちのため修正はできません。',
+            'isEditable' => $isEditable,
+            'message' => $message,
         ]);
     }
 
@@ -158,7 +167,7 @@ class AttendanceController extends Controller
 
         return view('user.detail', [
             'attendance' => $attendance,
-            'isEditable' => $attendance->can_edit,
+            'isEditable' => false,
             'message' => $attendance->can_edit ? null : '*承認待ちのため修正はできません。',
         ]);
     }
