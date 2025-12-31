@@ -29,12 +29,10 @@ Route::post('/admin/login', [AuthenticatedSessionController::class, 'store'])
     ->name('admin.login.post');
 
 
-// 認証必須グループ
 Route::middleware('auth', 'verified')->group(function () {
 
-    // ======================
-    // 一般ユーザー側
-    // ======================
+
+// 一般ユーザー側
     Route::get('/attendance', [UserAttendanceController::class, 'create'])->name('attendance.create');
     Route::post('/attendance', [UserAttendanceController::class, 'store'])->name('attendance.store');
     Route::patch('/attendance/{id}', [UserAttendanceController::class, 'update'])->name('attendance.update');
@@ -50,9 +48,8 @@ Route::middleware('auth', 'verified')->group(function () {
     Route::get('/attendance/request/{id}', [UserAttendanceController::class, 'showrequest'])->name('attendance.detailrequest');
 });
 
-// ======================
+
 // 管理者側
-// ======================
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/attendance/list', [AdminAttendanceController::class, 'index']);
     Route::get('/admin/attendance/{id}', [AdminAttendanceController::class, 'show'])->name('admin.attendance.detail');

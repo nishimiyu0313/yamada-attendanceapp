@@ -21,17 +21,17 @@ class AttendancesTableSeeder extends Seeder
 
         foreach ($users as $user) {
             for ($i = 0; $i < 20; $i++) {
-                $workDate = now()->subDays($i); // 今日から遡る日付
+                $workDate = now()->subDays($i);
 
                 $attendance = Attendance::factory()->create([
                     'user_id' => $user->id,
                     'work_date' => $workDate->format('Y-m-d'),
                 ]);
 
-                if ($i % 5 === 0) { // 適当に5日ごとに申請
+                if ($i % 5 === 0) {
                     Request::factory()->create([
                         'attendance_id' => $attendance->id,
-                        'status' => 'applied', // 承認待ち
+                        'status' => 'applied',
                         'requested_clock_in' => \Carbon\Carbon::parse($attendance->clock_in)->addHour(),
                         'requested_clock_out' => \Carbon\Carbon::parse($attendance->clock_out)->addHour(),
                     ]);
