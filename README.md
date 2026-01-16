@@ -93,7 +93,7 @@ php artisan test
 ```
 ## 使用技術
 ```
-・PHP8.1
+・PHP 8.1
 ・laravel 8.0
 ・MySQL 8.0
 ・Mailhog　（開発環境：メール送信確認用）
