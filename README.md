@@ -104,7 +104,6 @@ php artisan test
 ・環境構築：http://localhost/
 ・phpMyAdmin:http://localhost:8080/
 ・Mailhog: http://localhost:8025
-
 ```
 
 ## ER図
