@@ -65,7 +65,6 @@ class AttendanceController extends Controller
         return redirect()->back()->with('success', '退勤が記録されました。');
     }
 
-
     public function index(Request $request)
     {
         $user = Auth::user();
@@ -91,8 +90,6 @@ class AttendanceController extends Controller
         return view('user.list', compact('dates', 'attendances', 'currentDate', 'prevDate', 'nextDate'));
     }
 
-
-
     public function show($id)
     {
         $attendance = Attendance::with('breaks')
@@ -102,10 +99,8 @@ class AttendanceController extends Controller
             abort(403);
         }
 
-        //$latestRequest = $attendance->requests()->with('breaks')->latest()->first();
-        // 承認待ちの最新申請のみ取得
         $latestRequest = $attendance->requests()
-            ->where('status', 'applied') // 承認待ちのみ
+            ->where('status', 'applied') 
             ->latest()
             ->first();
 
@@ -124,7 +119,7 @@ class AttendanceController extends Controller
         $isEditable = false;
         $message = '*修正待ちのため修正はできません。';
     } else {
-        // 修正可能
+        
         $isEditable = $attendance->can_edit;
         $message = $attendance->can_edit ? null : '*修正待ちのため修正はできません。';
     }

@@ -44,36 +44,11 @@ class Attendance extends Model
         return $this->hasMany(Request::class);
     }
 
-
-    public function getStatusLabelAttribute(): string
-    {
-        return match ($this->status) {
-            self::STATUS_WORKING  => '勤務中',
-            self::STATUS_BREAKING => '休憩中',
-            self::STATUS_FINISHED => '退勤済',
-            default => '不明',
-        };
-    }
-
     public function scopeToday($query)
     {
         return $query->where('work_date', now()->toDateString());
     }
 
-    public function isWorking(): bool
-    {
-        return $this->status === self::STATUS_WORKING;
-    }
-
-    public function isBreaking(): bool
-    {
-        return $this->status === self::STATUS_BREAKING;
-    }
-
-    public function isFinished(): bool
-    {
-        return $this->status === self::STATUS_FINISHED;
-    }
 
     public function getBreakMinutesTotalAttribute(): int
     {
